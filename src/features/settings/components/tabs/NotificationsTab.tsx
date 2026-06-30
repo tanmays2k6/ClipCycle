@@ -14,7 +14,7 @@ function Toggle({ enabled, onChange }: { enabled: boolean, onChange: (val: boole
     >
       <div
         className={cn(
-          "absolute top-0.5 w-5 h-5 rounded-full bg-white transition-transform duration-300 shadow-sm",
+          "absolute top-0.5 w-5 h-5 rounded-full bg-card transition-transform duration-300 shadow-sm",
           enabled ? "translate-x-5" : "translate-x-0.5"
         )}
       />
@@ -22,21 +22,22 @@ function Toggle({ enabled, onChange }: { enabled: boolean, onChange: (val: boole
   );
 }
 
-export function NotificationsTab({ data, update }: { data: any, update: (data: any) => void }) {
-  const NotificationRow = ({ id, label, desc, icon: Icon }: any) => (
-    <div className="flex items-center justify-between p-5 hover:bg-surface-hover/30 transition-colors">
-      <div className="flex items-start gap-4">
-        <div className="w-8 h-8 rounded-full bg-surface border border-border flex items-center justify-center shrink-0 mt-0.5">
-          <Icon className="w-4 h-4 text-text-secondary" />
-        </div>
-        <div>
-          <p className="text-sm font-medium text-text-primary">{label}</p>
-          <p className="text-xs text-text-tertiary mt-1">{desc}</p>
-        </div>
+const NotificationRow = ({ id, label, desc, icon: Icon, data, update }: any) => (
+  <div className="flex items-center justify-between p-5 hover:bg-surface-hover/30 transition-colors">
+    <div className="flex items-start gap-4">
+      <div className="w-8 h-8 rounded-full bg-surface border border-border flex items-center justify-center shrink-0 mt-0.5">
+        <Icon className="w-4 h-4 text-text-secondary" />
       </div>
-      <Toggle enabled={data?.[id]} onChange={(val) => update({ [id]: val })} />
+      <div>
+        <p className="text-sm font-medium text-text-primary">{label}</p>
+        <p className="text-xs text-text-tertiary mt-1">{desc}</p>
+      </div>
     </div>
-  );
+    <Toggle enabled={data?.[id]} onChange={(val) => update({ [id]: val })} />
+  </div>
+);
+
+export function NotificationsTab({ data, update }: { data: any, update: (data: any) => void }) {
 
   return (
     <div className="space-y-8">
@@ -49,18 +50,21 @@ export function NotificationsTab({ data, update }: { data: any, update: (data: a
             label="Email Notifications" 
             desc="Receive notifications via your registered email address." 
             icon={Mail} 
+            data={data} update={update}
           />
           <NotificationRow 
             id="push_notifications" 
             label="Push Notifications" 
             desc="Receive push notifications on your mobile device." 
             icon={Smartphone} 
+            data={data} update={update}
           />
           <NotificationRow 
             id="desktop_notifications" 
             label="Desktop Notifications" 
             desc="Receive notifications in your browser." 
             icon={Monitor} 
+            data={data} update={update}
           />
         </div>
       </div>
@@ -74,24 +78,28 @@ export function NotificationsTab({ data, update }: { data: any, update: (data: a
             label="AI Suggestions" 
             desc="Get notified when AI finishes generating content or analyzing ideas." 
             icon={Sparkles} 
+            data={data} update={update}
           />
           <NotificationRow 
             id="weekly_digest" 
             label="Weekly Digest" 
             desc="A weekly summary of your content performance and new ideas." 
             icon={Calendar} 
+            data={data} update={update}
           />
           <NotificationRow 
             id="product_updates" 
             label="Product Updates" 
             desc="News about new features, improvements, and changes to ClipCycle." 
             icon={Zap} 
+            data={data} update={update}
           />
           <NotificationRow 
             id="security_alerts" 
             label="Security Alerts" 
             desc="Important notifications about your account security." 
             icon={ShieldAlert} 
+            data={data} update={update}
           />
         </div>
       </div>

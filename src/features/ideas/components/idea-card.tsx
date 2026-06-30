@@ -21,7 +21,9 @@ import {
   Trash2,
   Wand2,
   Star,
-  ExternalLink
+  ExternalLink,
+  Send,
+  CheckCircle2
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import type { Idea } from "@/types/database";
@@ -53,11 +55,15 @@ const sourceIcons: Record<string, React.ElementType> = {
   bookmark: Bookmark,
 };
 
-// Draft: Gray, Pending: Amber, Published: Green, Archived: Slate
+// Draft: Gray/Yellow, Generated: Purple, Ready: Green, Published: Blue
 const statusConfig: Record<string, { label: string; color: string; bg: string }> = {
-  draft: { label: "Draft", color: "text-gray-400", bg: "bg-gray-500/10 border-gray-500/20" },
+  draft: { label: "Draft", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
+  analyzed: { label: "Analyzed", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
+  generated: { label: "AI Generated", color: "text-purple-400", bg: "bg-purple-500/10 border-purple-500/20" },
+  ready: { label: "Ready", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
+  published: { label: "Published", color: "text-blue-500", bg: "bg-blue-500/10 border-blue-500/20" },
   pending: { label: "Pending", color: "text-amber-400", bg: "bg-amber-400/10 border-amber-500/20" },
-  used: { label: "Published", color: "text-emerald-400", bg: "bg-emerald-400/10 border-emerald-500/20" },
+  used: { label: "Published", color: "text-blue-500", bg: "bg-blue-500/10 border-blue-500/20" },
   archived: { label: "Archived", color: "text-slate-400", bg: "bg-slate-500/10 border-slate-500/20" },
 };
 
@@ -92,6 +98,9 @@ export const IdeaCard = React.memo(function IdeaCard({ idea, index }: { idea: Id
     >
       {/* Background Glow on Hover */}
       <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      {idea.status === "published" && (
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-emerald-500" />
+      )}
 
       {/* Top Header: Source, Date, Status */}
       <div className="flex items-start justify-between gap-4 mb-4 relative z-10">
@@ -100,11 +109,19 @@ export const IdeaCard = React.memo(function IdeaCard({ idea, index }: { idea: Id
             <SourceIcon className="w-5 h-5 text-text-secondary" />
           </div>
           <div className="min-w-0">
-            <p className="text-[13px] font-medium text-text-secondary truncate">
-              {idea.source_label || "Manual Entry"}
-            </p>
+            {idea.status === "published" && idea.published_platform ? (
+              <p className="text-[13px] font-medium text-emerald-500 flex items-center gap-1">
+                <CheckCircle2 className="w-3.5 h-3.5" /> {idea.published_platform}
+              </p>
+            ) : (
+              <p className="text-[13px] font-medium text-text-secondary truncate">
+                {idea.source_label || "Manual Entry"}
+              </p>
+            )}
             <p className="text-[11px] text-text-tertiary font-medium mt-0.5">
-              {formattedDate}
+              {idea.status === "published" && idea.published_at 
+                ? format(parseISO(idea.published_at), "MMM d, yyyy")
+                : formattedDate}
             </p>
           </div>
         </div>
@@ -214,6 +231,14 @@ export const IdeaCard = React.memo(function IdeaCard({ idea, index }: { idea: Id
             <motion.button aria-label="Delete Idea" whileTap={{ scale: 0.92 }} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-text-secondary hover:text-red-400 hover:bg-red-400/10 transition-colors">
               <Trash2 className="w-4 h-4" />
             </motion.button>
+            {(idea.status === "generated" || idea.status === "ready" || idea.status === "published") && (
+              <>
+                <div className="w-px h-4 bg-border mx-1" />
+                <motion.button aria-label={idea.status === "published" ? "View Published" : "Publish"} whileTap={{ scale: 0.92 }} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-brand-primary hover:text-white hover:bg-brand-primary transition-colors">
+                  <Send className="w-4 h-4" />
+                </motion.button>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

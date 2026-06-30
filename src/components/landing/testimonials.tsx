@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
+import { Star, GraduationCap, Building2, Code2 } from "lucide-react";
+import { cn } from "@/utils/cn";
 
 const testimonials = [
   {
@@ -9,7 +10,7 @@ const testimonials = [
     handle: "@ananya.creates",
     platform: "Instagram",
     avatar: "AK",
-    gradient: "from-violet-400 to-violet-600",
+    color: "bg-purple-100 text-purple-700",
     quote:
       "I used to lose at least 3 content ideas a week. Now everything goes into ClipCycle and the AI actually suggests which ones would work best for Reels vs. Carousels. Game changer.",
     rating: 5,
@@ -19,9 +20,9 @@ const testimonials = [
     handle: "@prateekr",
     platform: "YouTube",
     avatar: "PR",
-    gradient: "from-red-400 to-red-600",
+    color: "bg-blue-100 text-blue-700",
     quote:
-      "The AI content generation is insane. I dropped in a rough idea about \"productivity tools for students\" and got a full YouTube script outline in seconds. This saves me hours every week.",
+      "The AI content generation is insane. I dropped in a rough idea about 'productivity tools for students' and got a full YouTube script outline in seconds. This saves me hours every week.",
     rating: 5,
   },
   {
@@ -29,7 +30,7 @@ const testimonials = [
     handle: "@sneha.writes",
     platform: "LinkedIn",
     avatar: "SM",
-    gradient: "from-blue-400 to-blue-600",
+    color: "bg-green-100 text-green-700",
     quote:
       "As someone who posts daily on LinkedIn, having all my ideas organized by topic and auto-tagged by relevance is a lifesaver. My content consistency went from 3x to 7x per week.",
     rating: 5,
@@ -39,7 +40,7 @@ const testimonials = [
     handle: "@vikramk",
     platform: "Twitter / X",
     avatar: "VK",
-    gradient: "from-cyan-400 to-cyan-600",
+    color: "bg-orange-100 text-orange-700",
     quote:
       "I screenshot tweets for inspiration constantly. ClipCycle captures them, understands the angle, and helps me write my own version. It's like having a creative assistant in my pocket.",
     rating: 5,
@@ -49,7 +50,7 @@ const testimonials = [
     handle: "@nisha.studies",
     platform: "Instagram",
     avatar: "NR",
-    gradient: "from-pink-400 to-pink-600",
+    color: "bg-pink-100 text-pink-700",
     quote:
       "Being a studygrammer, I get ideas during lectures all the time. A quick voice note into ClipCycle and it's captured, tagged, and ready to turn into a carousel when I have time.",
     rating: 5,
@@ -59,52 +60,85 @@ const testimonials = [
     handle: "@rohan.dev",
     platform: "YouTube",
     avatar: "RD",
-    gradient: "from-emerald-400 to-emerald-600",
+    color: "bg-teal-100 text-teal-700",
     quote:
       "I was using Notion, Google Keep, and Apple Notes to save ideas. Now it's just ClipCycle. The semantic search alone is worth it — I search by vibe and it finds exactly what I need.",
     rating: 5,
   },
 ];
 
+const communities = [
+  { name: "Stanford University", icon: GraduationCap },
+  { name: "Y Combinator Startup School", icon: Building2 },
+  { name: "Major League Hacking", icon: Code2 },
+  { name: "MIT CS", icon: GraduationCap },
+  { name: "Creator Economy", icon: Building2 },
+];
+
 export function Testimonials() {
   return (
-    <section className="section-padding relative overflow-hidden" id="testimonials">
-      {/* Divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] max-w-[800px] h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+    <section className="section-padding relative overflow-hidden bg-slate-50 dark:bg-secondary border-b border-border/50" id="testimonials">
+      <div className="container-premium relative z-10">
+        
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-sm uppercase tracking-wider font-semibold text-primary mb-6"
+          >
+            Social Proof
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-h2"
+          >
+            Loved by student creators.
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-body mt-6"
+          >
+            Join thousands of creators who are already using ClipCycle to organize their content ideas.
+          </motion.p>
+        </div>
 
-      <div className="container-premium">
+        {/* Communities Banner */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+          className="flex flex-wrap justify-center gap-8 md:gap-16 items-center mb-20 py-8 border-y border-border/50 opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
         >
-          <span className="text-sm font-semibold uppercase tracking-widest text-text-tertiary">
-            Testimonials
-          </span>
-          <h2 className="mt-4 text-section max-w-2xl mx-auto">
-            Loved by <span className="text-text-secondary">student creators</span>
-          </h2>
-          <p className="mt-4 text-lg text-text-secondary max-w-xl mx-auto">
-            Hear from creators who stopped losing ideas and started creating
-            more consistently.
-          </p>
+          {communities.map((community, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <community.icon className="w-5 h-5 text-foreground" />
+              <span className="font-semibold text-foreground text-sm tracking-tight">{community.name}</span>
+            </div>
+          ))}
         </motion.div>
 
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-max max-w-6xl mx-auto">
-          {testimonials.map((t, i) => (
+        {/* Testimonials Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-max max-w-[1400px] mx-auto">
+          {testimonials.map((testimonial, i) => (
             <motion.div
-              key={t.name}
+              key={testimonial.name}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="group p-8 rounded-3xl glass border border-border hover:border-border-hover transition-all duration-500 hover:shadow-lg flex flex-col h-full"
+              transition={{ duration: 0.5, delay: i * 0.05 }}
+              className="card-base hover-lift flex flex-col h-full bg-card"
             >
               {/* Stars */}
               <div className="flex gap-1 mb-6">
-                {Array.from({ length: t.rating }).map((_, j) => (
+                {Array.from({ length: testimonial.rating }).map((_, j) => (
                   <Star
                     key={j}
                     className="w-4 h-4 fill-amber-400 text-amber-400"
@@ -113,23 +147,31 @@ export function Testimonials() {
               </div>
 
               {/* Quote */}
-              <p className="text-base text-text-secondary leading-relaxed flex-1">
-                &ldquo;{t.quote}&rdquo;
+              <p className="text-body flex-1 text-foreground leading-relaxed font-medium">
+                "{testimonial.quote}"
               </p>
-
+              
               {/* Author */}
-              <div className="mt-8 flex items-center gap-4 pt-6 border-t border-border/50">
+              <div className="mt-8 flex items-center gap-4 pt-6 border-t border-border">
                 <div
-                  className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.gradient} flex items-center justify-center text-sm font-semibold text-white shrink-0`}
+                  className={cn("w-14 h-14 rounded-full flex items-center justify-center text-[18px] font-bold shrink-0", testimonial.color)}
                 >
-                  {t.avatar}
+                  {testimonial.avatar}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-base font-semibold text-text-primary truncate">
-                    {t.name}
-                  </p>
-                  <p className="text-xs text-text-tertiary truncate">
-                    {t.handle} · {t.platform}
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <p className="text-body text-[16px] font-bold truncate text-foreground leading-tight">
+                      {testimonial.name}
+                    </p>
+                    {/* Verified Badge */}
+                    <div className="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center shrink-0">
+                      <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="text-caption truncate mt-0">
+                    {testimonial.handle} · {testimonial.platform}
                   </p>
                 </div>
               </div>

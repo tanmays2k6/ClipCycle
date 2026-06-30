@@ -1,4 +1,4 @@
-export type IdeaStatus = "pending" | "used" | "draft" | "archived";
+export type IdeaStatus = "pending" | "used" | "draft" | "analyzed" | "generated" | "ready" | "published" | "archived";
 export type IdeaPlatform = "instagram" | "youtube" | "linkedin" | "twitter" | "blog";
 export type IdeaSource = "text" | "link" | "screenshot" | "voice" | "instagram-save" | "bookmark";
 
@@ -13,6 +13,11 @@ export interface Idea {
   tags: string[];
   createdAt: string;
   aiSuggestion?: string;
+  publishedAt?: string;
+  publishedPlatform?: string;
+  publishedUrl?: string;
+  scheduledAt?: string;
+  lastGeneratedAt?: string;
 }
 
 export interface DashboardStats {

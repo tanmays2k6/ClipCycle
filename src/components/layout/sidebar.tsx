@@ -29,7 +29,6 @@ const navGroups = [
       { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
       { label: "Ideas", href: "/dashboard/ideas", icon: Lightbulb },
       { label: "Search", href: "/dashboard/search", icon: Search },
-      { label: "AI Studio", href: "/dashboard/ai-studio", icon: Sparkles },
       { label: "AI Generator", href: "/dashboard/generate", icon: Wand2 },
     ],
   },
@@ -51,9 +50,10 @@ const navGroups = [
 interface SidebarProps {
   collapsed: boolean;
   onToggle: () => void;
+  isMobile?: boolean;
 }
 
-export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+export function Sidebar({ collapsed, onToggle, isMobile }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -73,12 +73,20 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       initial={false}
       animate={{ width: collapsed ? 72 : 280 }}
       transition={{ type: "spring", stiffness: 400, damping: 30, mass: 0.8 }}
-      className="hidden lg:flex flex-col h-screen sticky top-0 border-r border-border bg-background z-40 overflow-hidden"
+      className={cn(
+        "flex flex-col h-screen sticky top-0 border-r border-border bg-background z-40 overflow-hidden",
+        !isMobile && "hidden lg:flex"
+      )}
     >
       {/* Logo */}
       <div className="flex items-center justify-between px-4 h-[64px] shrink-0 border-b border-border/50">
-        <Link href="/dashboard" className="flex items-center min-w-0 h-full">
-          <Logo size={32} animated />
+        <Link href="/dashboard" className="flex items-center min-w-0 h-full gap-3">
+          <Logo variant="icon" size={collapsed ? 28 : 32} />
+          {!collapsed && (
+            <span className="font-bold text-xl tracking-tight text-text-primary">
+              ClipCycle
+            </span>
+          )}
         </Link>
         <motion.button
           whileTap={{ scale: 0.9 }}
@@ -190,7 +198,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             />
           ) : (
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-xs font-semibold text-white shrink-0 shadow-sm">
-              {userInitials}
+              <Logo variant="icon" size={18} />
             </div>
           )}
           
@@ -201,11 +209,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               className="min-w-0 flex-1"
             >
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-text-primary truncate">
+                <p className="text-body font-semibold truncate">
                   {userDisplayName}
                 </p>
               </div>
-              <p className="text-xs text-text-tertiary truncate">
+              <p className="text-caption truncate">
                 Pro Plan
               </p>
             </motion.div>

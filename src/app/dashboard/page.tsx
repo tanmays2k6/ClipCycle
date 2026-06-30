@@ -52,7 +52,7 @@ export default async function DashboardPage() {
     if (totalIdeas > 0) {
       const dates = [...new Set(allIdeas.map(d => new Date(d.created_at).toDateString()))];
       const today = new Date().toDateString();
-      let checkDate = new Date();
+      const checkDate = new Date();
       
       if (dates.includes(today)) {
         streak = 1;

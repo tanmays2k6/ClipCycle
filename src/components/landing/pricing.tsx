@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, Sparkles } from "lucide-react";
+import { Check } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/utils/cn";
 
 const plans = [
   {
@@ -20,6 +21,7 @@ const plans = [
     cta: "Start Free",
     href: "/auth/signup",
     highlighted: false,
+    badge: null
   },
   {
     name: "Pro",
@@ -39,38 +41,45 @@ const plans = [
     cta: "Get Pro Access",
     href: "/auth/signup",
     highlighted: true,
-  },
+    badge: "Most Popular"
+  }
 ];
 
 export function Pricing() {
   return (
-    <section id="pricing" className="section-padding relative">
-      {/* Divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] max-w-[800px] h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-violet-600/5 rounded-full blur-3xl pointer-events-none" />
-
+    <section id="pricing" className="section-padding relative bg-background border-b border-border/50">
       <div className="container-premium">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center"
-        >
-          <span className="text-sm font-semibold uppercase tracking-widest text-text-tertiary">
+        
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-sm uppercase tracking-wider font-semibold text-primary mb-6"
+          >
             Pricing
-          </span>
-          <h2 className="mt-4 text-section max-w-2xl mx-auto">
-            Simple, transparent <span className="gradient-text">pricing</span>
-          </h2>
-          <p className="mt-4 text-lg text-text-secondary max-w-xl mx-auto">
-            Start free. Upgrade when you&apos;re ready. No hidden fees. Cancel anytime.
-          </p>
-        </motion.div>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-h2"
+          >
+            Simple, transparent pricing.
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-body mt-6"
+          >
+            Start free. Upgrade when you're ready. No hidden fees. Cancel anytime.
+          </motion.p>
+        </div>
 
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center gap-8 md:gap-12 max-w-6xl mx-auto mt-[100px]">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
@@ -78,46 +87,43 @@ export function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className={`relative group p-8 rounded-3xl border transition-all duration-500 hover:-translate-y-1 ${
+              className={cn(
+                "relative bg-card rounded-[32px] p-8 transition-all duration-300 flex flex-col w-full min-h-[600px]",
                 plan.highlighted
-                  ? "bg-surface border-violet-500/30 shadow-2xl shadow-violet-500/10"
-                  : "glass border-border hover:border-border-hover shadow-lg"
-              }`}
+                  ? "border-2 border-primary shadow-[0_0_40px_-10px_rgba(37,99,235,0.4)] scale-100 lg:scale-[1.05] z-10"
+                  : "border border-border shadow-sm hover:shadow-md hover:-translate-y-1"
+              )}
             >
-              {/* Popular badge */}
-              {plan.highlighted && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center gap-1.5 px-4 py-1 text-xs font-semibold uppercase tracking-wider rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-glow">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    Most Popular
-                  </span>
+              {plan.badge && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-primary text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-sm">
+                  {plan.badge}
                 </div>
               )}
 
               <div className="mb-8">
-                <h3 className="text-xl font-bold text-text-primary">
+                <h3 className="text-h3 text-foreground mb-2">
                   {plan.name}
                 </h3>
-                <p className="mt-2 text-sm text-text-secondary">
+                <p className="text-sm text-muted-foreground h-10">
                   {plan.description}
                 </p>
                 <div className="mt-6 flex items-baseline gap-1">
-                  <span className="text-5xl font-bold text-text-primary tracking-tight">
+                  <span className="text-5xl font-bold text-foreground tracking-tight">
                     {plan.price}
                   </span>
-                  <span className="text-sm font-medium text-text-tertiary">
+                  <span className="text-sm font-medium text-muted-foreground">
                     {plan.period}
                   </span>
                 </div>
               </div>
 
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-4 mb-10 flex-1">
                 {plan.features.map((feature) => (
                   <li
                     key={feature}
-                    className="flex items-start gap-3 text-sm text-text-secondary"
+                    className="flex items-start gap-3 text-sm text-foreground font-medium"
                   >
-                    <Check className="w-4 h-4 text-violet-400 mt-0.5 shrink-0" />
+                    <Check className="w-5 h-5 text-primary shrink-0" />
                     {feature}
                   </li>
                 ))}
@@ -125,11 +131,10 @@ export function Pricing() {
 
               <Link
                 href={plan.href}
-                className={`w-full py-4 px-4 text-sm font-medium rounded-2xl transition-all duration-300 flex justify-center ${
-                  plan.highlighted
-                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-xl shadow-violet-600/20"
-                    : "bg-surface-hover border border-border text-text-primary hover:border-border-hover hover:bg-surface"
-                }`}
+                className={cn(
+                  "w-full",
+                  plan.highlighted ? "btn-primary" : "btn-secondary"
+                )}
               >
                 {plan.cta}
               </Link>

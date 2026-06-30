@@ -63,12 +63,12 @@ export function DangerZoneTab() {
               value={confirmation}
               onChange={(e) => setConfirmation(e.target.value)}
               placeholder="DELETE"
-              className="w-full sm:w-64 bg-surface border border-red-500/20 rounded-xl px-4 py-2.5 text-sm font-mono text-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/50 transition-all placeholder:text-red-500/30"
+              className="input-base input-error w-full sm:w-64 font-mono text-red-500 placeholder:text-red-500/30"
             />
             <button
               onClick={handleDelete}
               disabled={!isConfirmed || isDeleting}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+              className="btn-danger w-full sm:w-auto"
             >
               <Trash2 className="w-4 h-4" />
               {isDeleting ? "Deleting..." : "Delete Account"}

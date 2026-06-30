@@ -41,9 +41,23 @@ function PreferencesEffect() {
   }, [setAll, setTheme]);
 
   // Sync Zustand theme state with next-themes dynamically for instant preview
+  // and sync to Supabase when it changes.
   useEffect(() => {
     if (theme && theme !== currentTheme) {
       setTheme(theme);
+      
+      // Fire-and-forget sync to Supabase
+      const syncTheme = async () => {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase.from("appearance_settings").upsert({
+            user_id: user.id,
+            theme: theme,
+          }, { onConflict: "user_id" });
+        }
+      };
+      syncTheme();
     }
   }, [theme, setTheme, currentTheme]);
 
@@ -73,7 +87,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
       {mounted && <PreferencesEffect />}
       {children}
     </NextThemesProvider>

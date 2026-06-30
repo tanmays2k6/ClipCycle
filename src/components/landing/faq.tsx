@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
+import { cn } from "@/utils/cn";
 
 const faqs = [
   {
@@ -13,7 +14,7 @@ const faqs = [
   {
     question: "How does the AI organization work?",
     answer:
-      "When you add an idea, ClipCycle's AI (powered by Google Gemini) analyzes the content to understand its topic, potential format (Reel, Carousel, Blog, Thread, etc.), target audience, and trending relevance. It then auto-tags the idea and places it in the most relevant smart collection.",
+      "When you add an idea, ClipCycle's AI analyzes the content to understand its topic, potential format (Reel, Carousel, Blog, Thread, etc.), target audience, and trending relevance. It then auto-tags the idea and places it in the most relevant smart collection.",
   },
   {
     question: "Can I generate content for multiple platforms?",
@@ -54,20 +55,30 @@ function FaqItem({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, delay: index * 0.06 }}
+      className={cn(
+        "bg-card rounded-2xl border transition-all duration-300 overflow-hidden",
+        isOpen ? "border-primary/20 shadow-md ring-1 ring-primary/10" : "border-border shadow-sm hover:border-primary/30"
+      )}
     >
       <button
         onClick={onToggle}
-        className="w-full flex items-start justify-between gap-4 p-6 text-left rounded-3xl glass border border-border hover:border-border-hover transition-all duration-300 group"
+        className="w-full flex items-start justify-between gap-4 p-6 text-left group bg-card"
         aria-expanded={isOpen}
       >
-        <span className="text-base font-semibold text-text-primary leading-relaxed">
+        <span className={cn(
+          "text-[16px] font-semibold transition-colors duration-300",
+          isOpen ? "text-primary" : "text-foreground group-hover:text-primary"
+        )}>
           {item.question}
         </span>
-        <span className="shrink-0 w-8 h-8 rounded-full bg-surface border border-border flex items-center justify-center mt-0.5 group-hover:bg-violet-500/10 group-hover:border-violet-500/20 transition-colors">
+        <span className={cn(
+          "shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300",
+          isOpen ? "bg-primary text-white" : "bg-secondary text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
+        )}>
           {isOpen ? (
-            <Minus className="w-4 h-4 text-violet-400" />
+            <Minus className="w-4 h-4" />
           ) : (
-            <Plus className="w-4 h-4 text-text-tertiary group-hover:text-violet-400 transition-colors" />
+            <Plus className="w-4 h-4" />
           )}
         </span>
       </button>
@@ -78,10 +89,9 @@ function FaqItem({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
           >
-            <div className="px-6 pb-6 pt-2">
-              <p className="text-sm text-text-secondary leading-relaxed">
+            <div className="px-6 pb-6 pt-0">
+              <p className="text-body text-muted-foreground leading-relaxed">
                 {item.answer}
               </p>
             </div>
@@ -93,33 +103,41 @@ function FaqItem({
 }
 
 export function Faq() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="section-padding relative">
-      {/* Divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] max-w-[800px] h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-
+    <section id="faq" className="section-padding relative bg-background border-b border-border/50">
       <div className="container-premium max-w-3xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center"
-        >
-          <span className="text-sm font-semibold uppercase tracking-widest text-text-tertiary">
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-sm uppercase tracking-wider font-semibold text-primary mb-6"
+          >
             FAQ
-          </span>
-          <h2 className="mt-4 text-section max-w-2xl mx-auto">
-            Questions? <span className="gradient-text">Answered.</span>
-          </h2>
-          <p className="mt-4 text-lg text-text-secondary">
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-h2"
+          >
+            Questions? Answered.
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-body mt-6"
+          >
             Everything you need to know about ClipCycle.
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
-        <div className="mt-16 space-y-4">
+        <div className="space-y-4">
           {faqs.map((item, i) => (
             <FaqItem
               key={i}

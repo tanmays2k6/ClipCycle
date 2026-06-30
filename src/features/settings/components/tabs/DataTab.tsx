@@ -77,15 +77,15 @@ export function DataTab() {
     <div className="space-y-8">
       {/* Export */}
       <div className="space-y-4">
-        <h3 className="text-sm font-semibold text-text-primary px-1">Export Data</h3>
-        <p className="text-xs text-text-tertiary px-1 -mt-2 mb-4">
+        <h3 className="text-h3 px-1">Export Data</h3>
+        <p className="text-caption px-1 -mt-2 mb-4">
           Download a copy of all your ideas, generated content, and settings.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button
             onClick={() => handleExport('csv')}
             disabled={isExporting}
-            className="flex flex-col items-center justify-center gap-3 p-6 rounded-2xl border border-border bg-surface-hover/30 hover:bg-surface-hover transition-colors disabled:opacity-50"
+            className="card-interactive flex flex-col items-center justify-center gap-3 disabled:opacity-50"
           >
             <div className="w-12 h-12 rounded-full bg-brand-primary/10 text-brand-primary flex items-center justify-center">
               <FileText className="w-6 h-6" />
@@ -96,7 +96,7 @@ export function DataTab() {
           <button
             onClick={() => handleExport('json')}
             disabled={isExporting}
-            className="flex flex-col items-center justify-center gap-3 p-6 rounded-2xl border border-border bg-surface-hover/30 hover:bg-surface-hover transition-colors disabled:opacity-50"
+            className="card-interactive flex flex-col items-center justify-center gap-3 disabled:opacity-50"
           >
             <div className="w-12 h-12 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center">
               <FileJson className="w-6 h-6" />
@@ -107,7 +107,7 @@ export function DataTab() {
           <button
             onClick={() => handleExport('markdown')}
             disabled={isExporting}
-            className="flex flex-col items-center justify-center gap-3 p-6 rounded-2xl border border-border bg-surface-hover/30 hover:bg-surface-hover transition-colors disabled:opacity-50"
+            className="card-interactive flex flex-col items-center justify-center gap-3 disabled:opacity-50"
           >
             <div className="w-12 h-12 rounded-full bg-gray-500/10 text-gray-400 flex items-center justify-center">
               <Database className="w-6 h-6" />
@@ -119,8 +119,8 @@ export function DataTab() {
 
       {/* Import */}
       <div className="space-y-4">
-        <h3 className="text-sm font-semibold text-text-primary px-1">Import Data</h3>
-        <div className="rounded-2xl border border-border bg-surface-hover/30 p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed">
+        <h3 className="text-h3 px-1">Import Data</h3>
+        <div className="card-base flex flex-col items-center justify-center text-center gap-4 border-dashed">
           <div className="w-12 h-12 rounded-full bg-surface border border-border flex items-center justify-center">
             <Upload className="w-5 h-5 text-text-secondary" />
           </div>
@@ -133,7 +133,7 @@ export function DataTab() {
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={isImporting}
-            className="px-4 py-2 mt-2 text-sm font-medium text-text-secondary bg-surface border border-border rounded-xl hover:text-text-primary hover:bg-surface-hover transition-colors disabled:opacity-50"
+            className="btn-secondary mt-2"
           >
             Select File
           </button>

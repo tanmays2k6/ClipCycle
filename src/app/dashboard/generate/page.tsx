@@ -17,8 +17,10 @@ import {
   Loader2,
   AlertCircle,
   Clock,
+  Send,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { PublishModal } from "@/features/ideas/components/publish-modal";
 
 // ── Tab definitions ──────────────────────────────────────────────────────────
 
@@ -114,6 +116,7 @@ export default function GeneratePage() {
   const [timeRemaining, setTimeRemaining] = useState(12);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const cacheRef = useRef<Record<string, ContentMap>>({});
@@ -187,6 +190,13 @@ export default function GeneratePage() {
       setProgressPercent(100);
       setProgressStep(PROGRESS_STEPS.length - 1);
       setIsSuccess(true);
+      toast.success("Content generated successfully", {
+        description: "Your content is ready to publish or edit.",
+        action: {
+          label: "Publish Now",
+          onClick: () => setIsPublishModalOpen(true),
+        },
+      });
       
       setTimeout(() => {
         setIsSuccess(false);
@@ -352,14 +362,14 @@ export default function GeneratePage() {
                   >
                     <tab.icon className={cn("w-4 h-4", tab.color)} />
                   </div>
-                  <div className="flex flex-col text-left">
+                  <div className="flex flex-col text-left overflow-hidden">
                     <span className={cn(
                       "text-sm font-medium",
                       activeTab === tab.key ? "text-text-primary" : "text-text-secondary"
                     )}>
                       {tab.label}
                     </span>
-                    <span className="text-[11px] text-text-tertiary">
+                    <span className="text-[11px] text-text-tertiary whitespace-normal line-clamp-2">
                       {tab.description}
                     </span>
                   </div>
@@ -441,6 +451,17 @@ export default function GeneratePage() {
                         )}
                       />
                       Redo
+                    </motion.button>
+                    
+                    {/* Publish */}
+                    <div className="w-px h-4 bg-border mx-1" />
+                    <motion.button
+                      whileTap={{ scale: 0.92 }}
+                      onClick={() => setIsPublishModalOpen(true)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-brand-primary bg-brand-primary/10 hover:bg-brand-primary hover:text-white transition-all"
+                    >
+                      <Send className="w-3 h-3" />
+                      Publish
                     </motion.button>
                   </div>
                 </div>
@@ -551,6 +572,14 @@ export default function GeneratePage() {
           </div>
         </motion.div>
       </div>
+
+      <PublishModal 
+        isOpen={isPublishModalOpen}
+        onClose={() => setIsPublishModalOpen(false)}
+        idea={null} // Mock idea for now since generate page doesn't always have a strict idea
+        initialPlatform={(activeTab.split("_")[0] as any)}
+        initialContent={currentContent}
+      />
     </div>
   );
 }

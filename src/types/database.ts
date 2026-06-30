@@ -5,7 +5,7 @@
 
 // ── Enums ────────────────────────────────────────────────────────────────────
 
-export type IdeaStatus = "pending" | "draft" | "used" | "archived";
+export type IdeaStatus = "pending" | "draft" | "analyzed" | "generated" | "ready" | "published" | "used" | "archived";
 export type IdeaSource = "text" | "link" | "screenshot" | "voice" | "instagram-save" | "bookmark";
 export type IdeaPlatform = "instagram" | "youtube" | "linkedin" | "twitter" | "blog";
 export type ContentType = "caption" | "script" | "post" | "thread" | "outline" | "article";
@@ -50,6 +50,11 @@ export interface Idea {
   original_transcript: string | null;
   ai_suggestion: string | null;
   is_favorite: boolean;
+  published_at: string | null;
+  published_platform: string | null;
+  published_url: string | null;
+  scheduled_at: string | null;
+  last_generated_at: string | null;
   created_at: string;
   updated_at: string;
 }

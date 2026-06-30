@@ -33,8 +33,9 @@ import {
 const ANALYSIS_STEPS = ["Reading idea...", "Extracting keywords...", "Identifying audience...", "Drafting summary..."];
 const CONTENT_STEPS = ["Analyzing idea...", "Optimizing for platform...", "Writing content..."];
 import { AudioPlayer } from "./audio-player";
+import { PublishModal } from "./publish-modal";
 import { cn } from "@/utils/cn";
-import type { Idea, IdeaStatus, AIAnalysis, GeneratedContent, ContentType } from "@/types/database";
+import type { Idea, IdeaStatus, AIAnalysis, GeneratedContent, ContentType, IdeaPlatform } from "@/types/database";
 
 interface IdeaDetailViewProps {
   idea: Idea;
@@ -71,6 +72,11 @@ export function IdeaDetailView({
   const [generatingContentType, setGeneratingContentType] = useState<ContentType | null>(null);
   const [contentProgressStep, setContentProgressStep] = useState(0);
   const [contentProgressPercent, setContentProgressPercent] = useState(0);
+
+  // Publish Modal State
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const [selectedPublishPlatform, setSelectedPublishPlatform] = useState<IdeaPlatform | undefined>();
+  const [selectedPublishContent, setSelectedPublishContent] = useState<string>("");
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -223,9 +229,13 @@ export function IdeaDetailView({
   // Status mapping colors
   const statusColors: Record<IdeaStatus, { text: string; bg: string; border: string }> = {
     pending: { text: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/20" },
-    draft: { text: "text-blue-400", bg: "bg-blue-400/10", border: "border-blue-400/20" },
-    used: { text: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20" },
-    archived: { text: "text-text-tertiary", bg: "bg-surface-hover", border: "border-border" },
+    draft: { text: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20" },
+    analyzed: { text: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20" },
+    generated: { text: "text-purple-400", bg: "bg-purple-500/10", border: "border-purple-500/20" },
+    ready: { text: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
+    published: { text: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/20" },
+    used: { text: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/20" },
+    archived: { text: "text-slate-400", bg: "bg-slate-500/10", border: "border-slate-500/20" },
   };
 
   const currentStatus = statusColors[idea.status];
@@ -252,22 +262,22 @@ export function IdeaDetailView({
           >
             <ChevronLeft className="w-4 h-4" />
           </Link>
-          <div className="text-left">
+          <div className="text-left w-full sm:w-auto overflow-hidden">
             <div className="flex items-center gap-1.5 text-xs text-text-tertiary">
-              <span className="cursor-default">Workspace</span>
-              <span>/</span>
+              <span className="cursor-default hidden sm:inline">Workspace</span>
+              <span className="hidden sm:inline">/</span>
               <Link href="/dashboard/ideas" className="hover:underline">Ideas</Link>
               <span>/</span>
-              <span className="text-text-secondary truncate max-w-[120px] sm:max-w-xs">{idea.title}</span>
+              <span className="text-text-secondary truncate block sm:max-w-xs">{idea.title}</span>
             </div>
-            <h2 className="text-lg font-bold text-text-primary tracking-tight mt-0.5 hidden sm:block truncate max-w-sm">
+            <h2 className="text-lg font-bold text-text-primary tracking-tight mt-0.5 hidden sm:block truncate">
               {idea.title}
             </h2>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-end sm:justify-end gap-2 mt-4 sm:mt-0 w-full sm:w-auto">
           {prevIdeaId && (
             <Link
               href={`/dashboard/ideas/${prevIdeaId}`}
@@ -401,34 +411,34 @@ export function IdeaDetailView({
               {isEditing ? (
                 <div className="space-y-3">
                   <div>
-                    <label className="text-xs font-medium text-text-tertiary mb-1 block">Title</label>
+                    <label className="label-base block mb-1">Title</label>
                     <input
                       type="text"
                       value={editedTitle}
                       onChange={(e) => setEditedTitle(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-sm text-text-primary focus:outline-none focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20"
+                      className="input-base"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-text-tertiary mb-1 block">Description</label>
+                    <label className="label-base block mb-1">Description</label>
                     <textarea
                       rows={5}
                       value={editedDescription}
                       onChange={(e) => setEditedDescription(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-sm text-text-primary focus:outline-none focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20 resize-none"
+                      className="input-base resize-none"
                     />
                   </div>
                   <div className="flex items-center justify-end gap-2 pt-2">
                     <button
                       onClick={handleCancelEdit}
-                      className="px-3.5 py-1.5 rounded-lg bg-surface border border-border text-xs text-text-secondary hover:text-text-primary transition-colors"
+                      className="btn-secondary"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleSaveEdit}
                       disabled={!editedTitle.trim()}
-                      className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-medium hover:from-violet-500 hover:to-indigo-500 transition-colors"
+                      className="btn-primary"
                     >
                       Save Changes
                     </button>
@@ -479,7 +489,7 @@ export function IdeaDetailView({
           {/* AI Analysis Panel */}
           <div className="p-6 rounded-2xl bg-surface/40 border border-border space-y-4 shadow-sm">
              <div className="flex items-center justify-between">
-              <h4 className="text-sm font-bold text-text-primary flex items-center gap-1.5">
+              <h4 className="text-h3 flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-violet-400" />
                 AI Analysis
               </h4>
@@ -557,8 +567,8 @@ export function IdeaDetailView({
                     <div className="w-12 h-12 rounded-xl bg-surface border border-border flex items-center justify-center mx-auto mb-4">
                       <Sparkles className="w-6 h-6 text-violet-400" />
                     </div>
-                    <h5 className="text-base font-semibold text-text-primary mb-2">No Analysis Yet</h5>
-                    <p className="text-xs text-text-tertiary max-w-[240px] mx-auto mb-6 leading-relaxed">
+                    <h5 className="text-h3 mb-2">No Analysis Yet</h5>
+                    <p className="text-caption max-w-[240px] mx-auto mb-6 leading-relaxed">
                       Generate an AI analysis to get hooks, audiences, keywords, summaries, and CTAs tailored to this idea.
                     </p>
                     <button 
@@ -600,9 +610,21 @@ export function IdeaDetailView({
                         {content.platform === "twitter" && <MessageCircle className="w-3.5 h-3.5 text-cyan-400" />}
                         {content.platform}
                       </span>
-                      <span className="text-[10px] text-text-tertiary">
-                        {format(parseISO(content.created_at), "MMM d, yyyy")}
-                      </span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] text-text-tertiary">
+                          {format(parseISO(content.created_at), "MMM d, yyyy")}
+                        </span>
+                        <button
+                          onClick={() => {
+                            setSelectedPublishPlatform(content.platform);
+                            setSelectedPublishContent(content.body);
+                            setIsPublishModalOpen(true);
+                          }}
+                          className="flex items-center gap-1.5 text-xs font-semibold text-brand-primary hover:text-brand-primary/80 transition-colors"
+                        >
+                          Publish <ChevronRight className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
                     <p className="text-xs text-text-secondary whitespace-pre-wrap">{content.body}</p>
                   </div>
@@ -773,13 +795,13 @@ export function IdeaDetailView({
               <div className="flex items-center justify-end gap-2 pt-2">
                 <button
                   onClick={() => setShowDeleteModal(false)}
-                  className="px-4 py-2 rounded-xl bg-surface border border-border text-xs font-semibold text-text-secondary hover:text-text-primary transition-colors"
+                  className="btn-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleDelete}
-                  className="px-4 py-2 rounded-xl bg-red-500 text-white text-xs font-semibold hover:bg-red-400 transition-colors"
+                  className="btn-danger"
                 >
                   Confirm Delete
                 </button>
@@ -788,6 +810,14 @@ export function IdeaDetailView({
           </div>
         )}
       </AnimatePresence>
+
+      <PublishModal 
+        isOpen={isPublishModalOpen}
+        onClose={() => setIsPublishModalOpen(false)}
+        idea={idea}
+        initialPlatform={selectedPublishPlatform}
+        initialContent={selectedPublishContent}
+      />
     </div>
   );
 }

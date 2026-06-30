@@ -119,8 +119,8 @@ export function TextCapture() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {/* Title */}
-      <div>
-        <label className="text-sm font-medium text-text-secondary mb-1.5 block">
+      <div className="form-group">
+        <label className="label-base">
           Idea Title <span className="text-red-400">*</span>
         </label>
         <input
@@ -129,20 +129,18 @@ export function TextCapture() {
           placeholder="What's your content idea?"
           disabled={isSubmitting}
           className={cn(
-            "w-full px-4 py-3 rounded-xl bg-background border text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-1 transition-all disabled:opacity-50",
-            errors.title 
-              ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20" 
-              : "border-border focus:border-violet-500/40 focus:ring-violet-500/20"
+            "input-base",
+            errors.title && "input-error"
           )}
         />
         {errors.title && (
-          <p className="mt-1.5 text-xs text-red-400">{errors.title.message}</p>
+          <p className="text-caption text-destructive">{errors.title.message}</p>
         )}
       </div>
 
       {/* Description */}
-      <div>
-        <label className="text-sm font-medium text-text-secondary mb-1.5 block">
+      <div className="form-group">
+        <label className="label-base">
           Description
         </label>
         <textarea
@@ -151,25 +149,23 @@ export function TextCapture() {
           disabled={isSubmitting}
           placeholder="Describe the idea in detail — angles, key points, references..."
           className={cn(
-            "w-full px-4 py-3 rounded-xl bg-background border text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-1 transition-all resize-none disabled:opacity-50",
-            errors.description
-              ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20"
-              : "border-border focus:border-violet-500/40 focus:ring-violet-500/20"
+            "input-base min-h-[100px] py-3 resize-none",
+            errors.description && "input-error"
           )}
         />
-        <div className="flex justify-between items-center mt-1.5">
-          <p className="text-xs text-text-tertiary">
+        <div className="flex justify-between items-center">
+          <p className="text-caption">
             {currentDescription.length}/500 characters
           </p>
           {errors.description && (
-            <p className="text-xs text-red-400">{errors.description.message}</p>
+            <p className="text-caption text-destructive">{errors.description.message}</p>
           )}
         </div>
       </div>
 
       {/* Target Platforms */}
       <div>
-        <label className="text-sm font-medium text-text-secondary mb-2 block">
+        <label className="label-base block mb-2">
           Target Platforms
         </label>
         <div className="flex flex-wrap gap-2">
@@ -198,7 +194,7 @@ export function TextCapture() {
 
       {/* Tags */}
       <div>
-        <label className="text-sm font-medium text-text-secondary mb-2 block">
+        <label className="label-base block mb-2">
           Tags
         </label>
         <div className="flex flex-wrap gap-2">
@@ -238,7 +234,7 @@ export function TextCapture() {
         type="submit"
         disabled={!isValid || isSubmitting}
         className={cn(
-          "w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-medium transition-all duration-300",
+          "btn-base w-full",
           isValid && !isSubmitting
             ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-lg shadow-violet-600/20"
             : "bg-surface-hover text-text-tertiary border border-border cursor-not-allowed opacity-70"

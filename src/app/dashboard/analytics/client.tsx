@@ -115,10 +115,10 @@ export default function AnalyticsClient({ ideas, activities, generatedCount }: A
       <header className="px-6 py-8 md:py-10 border-b border-border/50 shrink-0">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-bold text-text-primary tracking-tight">
+            <h1 className="text-h1">
               Analytics
             </h1>
-            <p className="text-text-tertiary mt-1">
+            <p className="text-body mt-1 text-text-tertiary">
               Understand your content workflow and performance.
             </p>
           </div>
@@ -196,7 +196,7 @@ export default function AnalyticsClient({ ideas, activities, generatedCount }: A
               transition={{ delay: 0.2 }}
               className="p-6 rounded-[24px] glass-premium card-hover-border"
             >
-              <h3 className="text-lg font-bold text-text-primary mb-6">Ideas Created</h3>
+              <h3 className="text-h3 mb-6">Ideas Created</h3>
               <div className="h-[300px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={ideasTimelineData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
@@ -222,7 +222,7 @@ export default function AnalyticsClient({ ideas, activities, generatedCount }: A
                 transition={{ delay: 0.3 }}
                 className="p-6 rounded-[24px] glass-premium card-hover-border flex flex-col"
               >
-                <h3 className="text-lg font-bold text-text-primary mb-6">Content by Platform</h3>
+                <h3 className="text-h3 mb-6">Content by Platform</h3>
                 <div className="flex-1 min-h-[200px] relative">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -261,7 +261,7 @@ export default function AnalyticsClient({ ideas, activities, generatedCount }: A
                 transition={{ delay: 0.4 }}
                 className="p-6 rounded-[24px] glass-premium card-hover-border flex flex-col"
               >
-                <h3 className="text-lg font-bold text-text-primary mb-6">Status Breakdown</h3>
+                <h3 className="text-h3 mb-6">Status Breakdown</h3>
                 <div className="flex-1 min-h-[200px] relative">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={statusData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
@@ -333,7 +333,7 @@ export default function AnalyticsClient({ ideas, activities, generatedCount }: A
                 <div className="w-8 h-8 rounded-full bg-brand-primary/10 flex items-center justify-center">
                   <Activity className="w-4 h-4 text-brand-primary" />
                 </div>
-                <h3 className="text-lg font-bold text-text-primary">AI Insights</h3>
+                <h3 className="text-h3">AI Insights</h3>
               </div>
               
               <ul className="space-y-4">
@@ -358,7 +358,7 @@ export default function AnalyticsClient({ ideas, activities, generatedCount }: A
               transition={{ delay: 0.7 }}
               className="p-6 rounded-[24px] glass-premium card-hover-border"
             >
-              <h3 className="text-lg font-bold text-text-primary mb-6">Recent Activity</h3>
+              <h3 className="text-h3 mb-6">Recent Activity</h3>
               
               <div className="space-y-6">
                 {activities.slice(0, 5).map((activity, i) => (

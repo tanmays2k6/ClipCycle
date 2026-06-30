@@ -14,7 +14,7 @@ function Toggle({ enabled, onChange }: { enabled: boolean, onChange: (val: boole
     >
       <div
         className={cn(
-          "absolute top-0.5 w-5 h-5 rounded-full bg-white transition-transform duration-300 shadow-sm",
+          "absolute top-0.5 w-5 h-5 rounded-full bg-card transition-transform duration-300 shadow-sm",
           enabled ? "translate-x-5" : "translate-x-0.5"
         )}
       />
@@ -104,8 +104,8 @@ export function PrivacyTab({ data, update }: { data: any, update: (data: any) =>
                 </div>
               </div>
             </div>
-            <button className="flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-medium text-text-secondary bg-surface border border-border rounded-lg hover:text-text-primary hover:bg-surface-hover transition-colors">
-              <LogOut className="w-3 h-3" />
+            <button className="btn-secondary">
+              <LogOut className="w-4 h-4" />
               Log Out
             </button>
           </div>

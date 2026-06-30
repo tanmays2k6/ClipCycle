@@ -23,13 +23,23 @@ import { cn } from "@/utils/cn";
 export default function IdeasClient({ initialIdeas }: { initialIdeas: Idea[] }) {
   const [ideas, _setIdeas] = useState<Idea[]>(initialIdeas);
   const [_isSearchFocused, setIsSearchFocused] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<string>("all");
 
   // Derived Stats
   const totalIdeas = ideas.length;
   const pendingIdeas = ideas.filter(i => i.status === "pending").length;
-  const publishedIdeas = ideas.filter(i => i.status === "used").length;
+  const publishedIdeas = ideas.filter(i => i.status === "published" || i.status === "used").length;
   // Mock AI Ready logic for KPI: items not yet published that have enough content
-  const aiReadyIdeas = ideas.filter(i => i.status !== "used" && i.description && i.description.length > 20).length;
+  const aiReadyIdeas = ideas.filter(i => i.status === "ready" || (i.status !== "published" && i.status !== "used" && i.description && i.description.length > 20)).length;
+
+  const filteredIdeas = ideas.filter(idea => {
+    if (activeFilter === "all") return true;
+    if (activeFilter === "draft") return idea.status === "draft" || idea.status === "pending";
+    if (activeFilter === "generated") return idea.status === "generated" || idea.status === "analyzed";
+    if (activeFilter === "ready") return idea.status === "ready";
+    if (activeFilter === "published") return idea.status === "published" || idea.status === "used";
+    return true;
+  });
 
   return (
     <div className="max-w-[1600px] mx-auto w-full flex flex-col min-h-full pb-16">
@@ -63,7 +73,7 @@ export default function IdeasClient({ initialIdeas }: { initialIdeas: Idea[] }) 
 
       {/* 3. Statistics Row */}
       <div className="px-4 sm:px-6 lg:px-8 mt-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: "Total Ideas", value: totalIdeas, icon: Lightbulb, color: "text-brand-primary", bg: "bg-brand-primary/10" },
             { label: "Pending", value: pendingIdeas, icon: Clock, color: "text-amber-400", bg: "bg-amber-400/10" },
@@ -107,7 +117,7 @@ export default function IdeasClient({ initialIdeas }: { initialIdeas: Idea[] }) 
           </div>
 
           {/* Right Toolbar Controls */}
-          <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0 scrollbar-hide shrink-0 justify-end">
+          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto shrink-0 md:justify-end">
             <button className="flex items-center gap-2 h-10 px-3 rounded-xl bg-surface border border-border text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors whitespace-nowrap shadow-sm">
               <Filter className="w-4 h-4 shrink-0" />
               <span>Filter</span>
@@ -123,13 +133,35 @@ export default function IdeasClient({ initialIdeas }: { initialIdeas: Idea[] }) 
           </div>
 
         </div>
+
+        {/* Filters Row */}
+        <div className="px-4 sm:px-6 lg:px-8 mt-4 w-full flex overflow-x-auto hide-scrollbar gap-2">
+          {["All", "Draft", "Generated", "Ready", "Published"].map((filter) => {
+            const key = filter.toLowerCase();
+            const isActive = activeFilter === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setActiveFilter(key)}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all",
+                  isActive
+                    ? "bg-brand-primary text-white shadow-sm"
+                    : "bg-surface border border-border text-text-secondary hover:text-text-primary hover:bg-surface-hover"
+                )}
+              >
+                {filter}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* 5. Idea Grid */}
       <div className="px-4 sm:px-6 lg:px-8 mt-8 flex-1">
-        {ideas.length > 0 ? (
+        {filteredIdeas.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ideas.map((idea, i) => (
+            {filteredIdeas.map((idea, i) => (
               <IdeaCard key={idea.id} idea={idea} index={i} />
             ))}
           </div>

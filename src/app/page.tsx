@@ -8,6 +8,7 @@ import {
   Pricing,
   Testimonials,
   Faq,
+  CTA,
   Footer,
 } from "@/components/landing";
 
@@ -24,6 +25,7 @@ export default function LandingPage() {
         <Testimonials />
         <Pricing />
         <Faq />
+        <CTA />
       </main>
       <Footer />
     </>

@@ -26,7 +26,7 @@ export function AccountTab({ data }: { data: any }) {
             </h3>
             <p className="text-sm text-text-secondary">{data?.email}</p>
           </div>
-          <button disabled={isGoogle} className="px-4 py-2 text-sm font-medium text-text-secondary bg-surface border border-border rounded-xl hover:text-text-primary hover:bg-surface-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          <button disabled={isGoogle} className="btn-secondary">
             Change Email
           </button>
         </div>
@@ -41,7 +41,7 @@ export function AccountTab({ data }: { data: any }) {
             </p>
           </div>
           {!isGoogle && (
-            <button className="px-4 py-2 text-sm font-medium text-text-secondary bg-surface border border-border rounded-xl hover:text-text-primary hover:bg-surface-hover transition-colors">
+            <button className="btn-secondary">
               Reset Password
             </button>
           )}
@@ -54,7 +54,7 @@ export function AccountTab({ data }: { data: any }) {
         <div className="rounded-2xl border border-border bg-surface-hover/30 divide-y divide-border">
           <div className="flex items-center justify-between p-5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center p-2 border border-border/50">
+              <div className="w-10 h-10 rounded-full bg-card flex items-center justify-center p-2 border border-border/50">
                 <svg viewBox="0 0 24 24" className="w-full h-full">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                   <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -74,7 +74,7 @@ export function AccountTab({ data }: { data: any }) {
                 Active
               </span>
             ) : (
-              <button className="px-4 py-1.5 text-sm font-medium text-text-secondary bg-surface border border-border rounded-xl hover:text-text-primary hover:bg-surface-hover transition-colors">
+              <button className="btn-secondary">
                 Connect
               </button>
             )}
@@ -112,7 +112,7 @@ export function AccountTab({ data }: { data: any }) {
               <p className="text-sm font-medium text-text-primary">Sign Out Everywhere</p>
               <p className="text-xs text-text-tertiary mt-1">Logs you out of all active sessions across all devices.</p>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-text-secondary bg-surface border border-border rounded-xl hover:text-text-primary hover:bg-surface-hover transition-colors">
+            <button className="btn-secondary">
               <LogOut className="w-4 h-4" />
               Sign Out
             </button>

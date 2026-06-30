@@ -90,9 +90,9 @@ function SearchResultRow({ idea, index }: { idea: Idea; index: number }) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: Math.min(index * 0.05, 0.5) }}
-        className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 rounded-2xl bg-surface/50 border border-border hover:border-border-hover hover:bg-surface transition-all duration-300 cursor-pointer"
+        className="group flex flex-col gap-3 p-4 rounded-2xl bg-surface/50 border border-border hover:border-border-hover hover:bg-surface transition-all duration-300 cursor-pointer h-full"
       >
-        <div className="flex items-center gap-4 w-full sm:w-auto flex-1 min-w-0">
+        <div className="flex items-start gap-4 w-full flex-1 min-w-0">
           <div className="w-10 h-10 rounded-xl bg-surface-hover flex items-center justify-center shrink-0">
             <SourceIcon className="w-5 h-5 text-text-tertiary" />
           </div>
@@ -103,24 +103,31 @@ function SearchResultRow({ idea, index }: { idea: Idea; index: number }) {
             <p className="text-xs text-text-tertiary mt-0.5 truncate">
               {idea.source_label || "Manual Entry"} · {formattedDate}
             </p>
+            {/* Meta row */}
+            <div className="flex flex-wrap items-center gap-2 mt-2">
+              {idea.tags && idea.tags.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1.5 min-w-0">
+                  {idea.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2 py-0.5 rounded border border-border bg-background text-[10px] font-medium text-text-secondary truncate max-w-[80px]"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                  {idea.tags.length > 3 && (
+                    <span className="text-[10px] text-text-tertiary">+{idea.tags.length - 3}</span>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-4 sm:gap-6 pl-14 sm:pl-0">
-          {/* Tags */}
-          <div className="hidden md:flex items-center gap-1.5 flex-wrap w-32">
-            {idea.tags?.slice(0, 2).map((tag) => (
-              <span
-                key={tag}
-                className="text-[11px] text-text-tertiary bg-surface-hover px-2 py-0.5 rounded-md truncate max-w-full"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
+        {/* Bottom row: Platforms and Status */}
+        <div className="flex items-center justify-between mt-auto pt-3 border-t border-border/50">
           {/* Platforms */}
-          <div className="hidden sm:flex items-center gap-1.5 w-16">
+          <div className="flex items-center gap-1.5">
             {idea.platforms?.slice(0, 3).map((p) => {
               const PIcon = platformIcons[p] ?? MessageSquare;
               return <PIcon key={p} className={cn("w-3.5 h-3.5", platformColors[p])} />;
@@ -130,7 +137,7 @@ function SearchResultRow({ idea, index }: { idea: Idea; index: number }) {
           {/* Status */}
           <span
             className={cn(
-              "text-[11px] font-medium px-2 py-0.5 rounded-md shrink-0 w-16 text-center",
+              "text-[11px] font-medium px-2 py-0.5 rounded-md shrink-0 text-center",
               status.color,
               status.bg
             )}
@@ -244,7 +251,7 @@ export default function SearchPage() {
           {/* Main Search Bar */}
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-r from-violet-500/20 to-indigo-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <motion.div whileHover={{ scale: 1.005 }} className="relative flex items-center bg-surface border border-border focus-within:border-violet-500/50 focus-within:ring-4 focus-within:ring-violet-500/10 focus-within:scale-[1.01] rounded-2xl px-4 py-3.5 transition-all duration-300">
+            <motion.div className="relative flex items-center bg-surface border border-border focus-within:border-violet-500/50 focus-within:ring-4 focus-within:ring-violet-500/10 rounded-2xl px-4 py-3.5 transition-all duration-300">
               <Search className="w-5 h-5 text-text-tertiary shrink-0 mr-3" />
               <input
                 type="text"
@@ -313,7 +320,7 @@ export default function SearchPage() {
                   <>
                     <Terminal className="w-3 h-3 text-emerald-400" />
                     Keyword Match
-                    <span className="ml-1 opacity-50">(Semantic coming soon)</span>
+                    <span className="ml-1 opacity-50 hidden sm:inline">(Semantic coming soon)</span>
                   </>
                 ) : (
                   <>
@@ -326,7 +333,7 @@ export default function SearchPage() {
 
             {/* List */}
             {results.length > 0 ? (
-              <div className="space-y-2 pb-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-12">
                 {results.map((idea, i) => (
                   <SearchResultRow key={idea.id} idea={idea} index={i} />
                 ))}

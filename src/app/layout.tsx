@@ -11,6 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://clipcycle.com"),
   title: "ClipCycle",
   description:
     "ClipCycle is the AI-powered Content Idea Vault for student creators. Capture ideas from anywhere, let AI organize them, and convert them into publish-ready content.",
@@ -23,20 +24,20 @@ export const metadata: Metadata = {
     "Instagram creators",
     "YouTube creators",
   ],
+  manifest: "/manifest.json",
   openGraph: {
     title: "ClipCycle — Never Lose Another Content Idea",
     description:
       "The AI-powered Content Idea Vault for student creators. Capture, organize, and create.",
     type: "website",
+    url: "https://clipcycle.com",
+    images: [{ url: "/images/logo-horizontal.png", width: 1024, height: 512 }],
   },
-  icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: '32x32' },
-      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
+  twitter: {
+    card: "summary_large_image",
+    title: "ClipCycle — Never Lose Another Content Idea",
+    description: "The AI-powered Content Idea Vault for student creators. Capture, organize, and create.",
+    images: ["/images/logo-horizontal.png"],
   },
 };
 

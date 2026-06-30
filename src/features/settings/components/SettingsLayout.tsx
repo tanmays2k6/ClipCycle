@@ -88,22 +88,18 @@ export function SettingsLayout({ initialSettings, onRefresh }: { initialSettings
   };
 
   const updateCategory = (category: string, updates: any) => {
-    setLocalSettings((prev: any) => {
-      const newSettings = {
-        ...prev,
-        [category]: { ...prev[category], ...updates },
-      };
+    // dynamically apply appearance immediately if changed so user can preview before saving
+    if (category === "appearance") {
+      if (updates.theme) setAll({ theme: updates.theme });
+      if (updates.accent_color) setAll({ accentColor: updates.accent_color });
+      if (updates.compact_mode !== undefined) setAll({ compactMode: updates.compact_mode });
+      if (updates.reduce_motion !== undefined) setAll({ reduceMotion: updates.reduce_motion });
+    }
 
-      // Also dynamically apply appearance immediately if changed so user can preview before saving
-      if (category === "appearance") {
-        if (updates.theme) setAll({ theme: updates.theme });
-        if (updates.accent_color) setAll({ accentColor: updates.accent_color });
-        if (updates.compact_mode !== undefined) setAll({ compactMode: updates.compact_mode });
-        if (updates.reduce_motion !== undefined) setAll({ reduceMotion: updates.reduce_motion });
-      }
-
-      return newSettings;
-    });
+    setLocalSettings((prev: any) => ({
+      ...prev,
+      [category]: { ...prev[category], ...updates },
+    }));
   };
 
   const handleCancel = () => {
@@ -145,10 +141,47 @@ export function SettingsLayout({ initialSettings, onRefresh }: { initialSettings
   };
 
   return (
-    <div className="flex flex-col gap-8 relative">
+    <div className="flex flex-col lg:flex-row gap-8 relative">
       
-      {/* Pill Tabs Navigation */}
-      <div className="flex overflow-x-auto no-scrollbar py-2 -mx-2 px-2 hide-scrollbar">
+      {/* Desktop Sidebar Navigation */}
+      <div className="hidden lg:flex flex-col gap-2 w-[240px] shrink-0 sticky top-24 self-start">
+        <h2 className="text-xl font-bold text-text-primary px-2 mb-2 tracking-tight">Settings</h2>
+        {TABS.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          const isDanger = tab.id === "danger";
+
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "relative px-4 py-3 text-sm font-medium transition-all flex items-center gap-3 rounded-xl group w-full text-left",
+                isActive
+                  ? isDanger ? "text-white" : "text-text-primary"
+                  : "text-text-tertiary hover:text-text-secondary hover:bg-surface"
+              )}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="activeTabSidebar"
+                  className={cn(
+                    "absolute inset-0 rounded-xl shadow-sm border",
+                    isDanger ? "bg-red-500 border-red-400" : "bg-surface border-border"
+                  )}
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <Icon className={cn("w-4 h-4 relative z-10 transition-colors", isActive ? (isDanger ? "text-white" : "text-brand-primary") : "group-hover:text-text-primary")} />
+              <span className="relative z-10">{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Mobile Horizontal Pill Tabs Navigation */}
+      <div className="flex lg:hidden overflow-x-auto no-scrollbar py-2 -mx-2 px-2 hide-scrollbar">
         <div className="flex gap-2 p-1.5 bg-surface-hover/50 rounded-2xl border border-border/50 backdrop-blur-md">
           {TABS.map((tab) => {
             const Icon = tab.icon;
@@ -186,7 +219,7 @@ export function SettingsLayout({ initialSettings, onRefresh }: { initialSettings
       </div>
 
       {/* Premium Content Card */}
-      <div className="min-h-[500px] bg-surface border border-border rounded-[24px] p-8 shadow-sm">
+      <div className="flex-1 min-h-[500px] bg-surface border border-border rounded-[24px] p-4 sm:p-8 shadow-sm">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -219,20 +252,20 @@ export function SettingsLayout({ initialSettings, onRefresh }: { initialSettings
               </span>
             </div>
             
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               {!showSavedState ? (
                 <>
                   <button
                     onClick={handleCancel}
                     disabled={isSaving}
-                    className="px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface rounded-xl transition-colors disabled:opacity-50"
+                    className="px-3 sm:px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface rounded-xl transition-colors disabled:opacity-50"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="px-6 py-2 text-sm font-medium text-white bg-brand-primary hover:brightness-110 rounded-xl shadow-[0_0_15px_rgba(139,92,246,0.3)] transition-all disabled:opacity-50 flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+                    className="px-4 sm:px-6 py-2 text-sm font-medium text-white bg-brand-primary hover:brightness-110 rounded-xl shadow-[0_0_15px_rgba(139,92,246,0.3)] transition-all disabled:opacity-50 flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
                   >
                     {isSaving ? (
                       <>

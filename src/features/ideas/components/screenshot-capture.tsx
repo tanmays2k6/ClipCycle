@@ -126,10 +126,10 @@ export function ScreenshotCapture() {
               <div className="w-14 h-14 rounded-2xl bg-surface-hover flex items-center justify-center mb-4">
                 <Upload className={cn("w-6 h-6 transition-colors", dragging ? "text-violet-400" : "text-text-tertiary")} />
               </div>
-              <p className="text-sm font-medium text-text-secondary">
+              <p className="text-h3 text-text-secondary">
                 {dragging ? "Drop your screenshot here" : "Drop a screenshot or click to upload"}
               </p>
-              <p className="text-xs text-text-tertiary mt-1">
+              <p className="text-caption mt-1">
                 PNG, JPG, or WebP — up to 10MB
               </p>
             </motion.div>
@@ -144,8 +144,8 @@ export function ScreenshotCapture() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-5"
         >
-          <div>
-            <label className="text-sm font-medium text-text-secondary mb-1.5 block">
+          <div className="form-group">
+            <label className="label-base">
               Idea Title
             </label>
             <input
@@ -153,7 +153,7 @@ export function ScreenshotCapture() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="What's this screenshot about?"
-              className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20 transition-all"
+              className="input-base"
             />
           </div>
 
@@ -169,7 +169,7 @@ export function ScreenshotCapture() {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={handleSave}
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-medium bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 transition-all shadow-lg shadow-violet-600/20"
+            className="btn-base w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-lg shadow-violet-600/20 border-0"
           >
             {saved ? (
               <>

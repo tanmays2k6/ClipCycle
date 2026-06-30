@@ -5,6 +5,24 @@ import { Camera } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/utils/cn";
+const InputRow = ({ label, id, value, type = "text", placeholder = "", maxLength, disabled = false, update }: any) => (
+  <div className="form-group">
+    <label htmlFor={id} className="label-base">{label}</label>
+    <input
+      id={id}
+      type={type}
+      value={value || ""}
+      onChange={(e) => !disabled && update({ [id]: e.target.value })}
+      maxLength={maxLength}
+      placeholder={placeholder}
+      disabled={disabled}
+      className={cn(
+        "input-base",
+        disabled && "opacity-60 cursor-not-allowed bg-surface/50"
+      )}
+    />
+  </div>
+);
 
 export function ProfileTab({ data, update }: { data: any, update: (data: any) => void }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -62,25 +80,6 @@ export function ProfileTab({ data, update }: { data: any, update: (data: any) =>
     }
   };
 
-  const InputRow = ({ label, id, value, type = "text", placeholder = "", maxLength, disabled = false }: any) => (
-    <div className="space-y-1.5">
-      <label htmlFor={id} className="text-sm font-medium text-text-secondary">{label}</label>
-      <input
-        id={id}
-        type={type}
-        value={value || ""}
-        onChange={(e) => !disabled && update({ [id]: e.target.value })}
-        maxLength={maxLength}
-        placeholder={placeholder}
-        disabled={disabled}
-        className={cn(
-          "w-full bg-surface-hover border border-border rounded-xl px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/50 transition-all",
-          disabled && "opacity-60 cursor-not-allowed bg-surface/50"
-        )}
-      />
-    </div>
-  );
-
   return (
     <div className="space-y-8">
       {/* Avatar Section */}
@@ -111,12 +110,12 @@ export function ProfileTab({ data, update }: { data: any, update: (data: any) =>
           />
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-text-primary">Profile Picture</h3>
-          <p className="text-xs text-text-tertiary mt-1 max-w-xs">
+          <h3 className="text-h3">Profile Picture</h3>
+          <p className="text-caption mt-2 max-w-xs">
             JPG, PNG or WEBP. 2MB max. We recommend using a square image.
           </p>
           {isUploading && (
-            <div className="mt-2 text-xs font-medium text-brand-primary animate-pulse">
+            <div className="mt-2 text-caption text-brand-primary animate-pulse">
               Uploading...
             </div>
           )}
@@ -125,13 +124,13 @@ export function ProfileTab({ data, update }: { data: any, update: (data: any) =>
 
       {/* Form Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <InputRow label="Full Name" id="full_name" value={data?.full_name} placeholder="e.g. Jane Doe" />
-        <InputRow label="Email Address" id="email" value={data?.email} disabled={true} placeholder="jane@example.com" />
+        <InputRow label="Full Name" id="full_name" value={data?.full_name} placeholder="e.g. Jane Doe" update={update} />
+        <InputRow label="Email Address" id="email" value={data?.email} disabled={true} placeholder="jane@example.com" update={update} />
         
-        <InputRow label="Username" id="username" value={data?.username} placeholder="janedoe" />
+        <InputRow label="Username" id="username" value={data?.username} placeholder="janedoe" update={update} />
         
-        <div className="col-span-1 md:col-span-2 space-y-1.5">
-          <label htmlFor="bio" className="text-sm font-medium text-text-secondary">Bio</label>
+        <div className="col-span-1 md:col-span-2 form-group">
+          <label htmlFor="bio" className="label-base">Bio</label>
           <textarea
             id="bio"
             value={data?.bio || ""}
@@ -139,24 +138,24 @@ export function ProfileTab({ data, update }: { data: any, update: (data: any) =>
             maxLength={160}
             rows={3}
             placeholder="A short bio about yourself"
-            className="w-full bg-surface-hover border border-border rounded-xl px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/50 transition-all resize-none"
+            className="input-base min-h-[100px] resize-none"
           />
-          <div className="text-right text-xs text-text-tertiary">
+          <div className="text-right text-caption">
             {(data?.bio || "").length} / 160
           </div>
         </div>
 
-        <InputRow label="Creator Category" id="creator_category" value={data?.creator_category} placeholder="e.g. Technology, Lifestyle" />
-        <InputRow label="College / University" id="college" value={data?.college} placeholder="e.g. Stanford University" />
-        <InputRow label="Website" id="website" value={data?.website} type="url" placeholder="https://example.com" />
+        <InputRow label="Creator Category" id="creator_category" value={data?.creator_category} placeholder="e.g. Technology, Lifestyle" update={update} />
+        <InputRow label="College / University" id="college" value={data?.college} placeholder="e.g. Stanford University" update={update} />
+        <InputRow label="Website" id="website" value={data?.website} type="url" placeholder="https://example.com" update={update} />
         
         <div className="col-span-1 md:col-span-2">
-          <h4 className="text-sm font-semibold text-text-primary mb-4 pb-2 border-b border-border">Social Links</h4>
+          <h4 className="text-h3 mb-4 pb-2 border-b border-border">Social Links</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <InputRow label="Twitter" id="twitter" value={data?.twitter} placeholder="@username" />
-            <InputRow label="LinkedIn" id="linkedin" value={data?.linkedin} placeholder="linkedin.com/in/username" />
-            <InputRow label="Instagram" id="instagram" value={data?.instagram} placeholder="@username" />
-            <InputRow label="YouTube" id="youtube" value={data?.youtube} placeholder="youtube.com/@username" />
+            <InputRow label="Twitter" id="twitter" value={data?.twitter} placeholder="@username" update={update} />
+            <InputRow label="LinkedIn" id="linkedin" value={data?.linkedin} placeholder="linkedin.com/in/username" update={update} />
+            <InputRow label="Instagram" id="instagram" value={data?.instagram} placeholder="@username" update={update} />
+            <InputRow label="YouTube" id="youtube" value={data?.youtube} placeholder="youtube.com/@username" update={update} />
           </div>
         </div>
       </div>

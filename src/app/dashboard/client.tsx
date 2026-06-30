@@ -7,13 +7,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Lightbulb, CheckCircle2, Clock, Sparkles, TrendingUp, TrendingDown, ArrowRight,
   Flame, Target, Zap, Plus, Activity, FileText, LayoutGrid, MessageCircle, Play, 
-  Layers, Send, Briefcase, Compass, Wand2, Bell, Hash, Edit2, Trash2, Heart, X, Camera, Mic, Loader2, AlertTriangle
+  Layers, Send, Briefcase, Compass, Wand2, Bell, Hash, Edit2, Trash2, Heart, X, Camera, Mic, Loader2, AlertTriangle, Search
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import type { Idea } from "@/types/database";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { toast } from "sonner";
 import { TabBar, TabPanel } from "@/components/shared/tabs";
+import { Logo } from "@/components/ui/logo";
 import {
   TextCapture,
   ScreenshotCapture,
@@ -46,79 +47,71 @@ const mockRepurposing = [
 
 function StatCard({ title, value, desc, icon: Icon, color, trendUp }: any) {
   return (
-    <motion.div 
-      whileHover={{ y: -4, scale: 1.02 }} 
-      className="h-[120px] rounded-[24px] bg-card border border-border p-5 flex flex-col justify-between group cursor-default shadow-sm hover:shadow-xl transition-all"
+    <div 
+      className="h-[100px] card-base hover:bg-card/80 transition-colors p-4 flex flex-col justify-between group cursor-default"
     >
-       <div className="flex justify-between items-start">
-         <span className="text-[16px] text-muted-foreground font-medium">{title}</span>
-         <div className={`p-2 rounded-xl bg-muted/50 ${color} group-hover:bg-muted transition-colors`}>
-            <Icon className="w-5 h-5" />
-         </div>
+       <div className="flex justify-between items-center">
+         <span className="text-[13px] text-muted-foreground font-medium tracking-tight">{title}</span>
+         <Icon className={`w-4 h-4 ${color} opacity-80`} />
        </div>
-       <div className="flex items-baseline gap-2">
-         <h3 className="text-[36px] font-bold text-foreground tracking-tight leading-none">{value}</h3>
-         <span className={`text-[13px] flex items-center gap-1 ${trendUp ? 'text-success' : 'text-muted-foreground'}`}>
-           {trendUp && <TrendingUp className="w-3.5 h-3.5" />}
+       <div className="flex items-baseline gap-2 mt-1">
+         <h3 className="text-[24px] font-semibold text-foreground tracking-tight leading-none">{value}</h3>
+         <span className={`text-[12px] flex items-center gap-0.5 ${trendUp ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+           {trendUp && <TrendingUp className="w-3 h-3" />}
            {desc}
          </span>
        </div>
-    </motion.div>
+    </div>
   )
 }
 
 function CompactIdeaCard({ idea, onClick, onEdit, onDelete, onFavourite, onGenerate }: { idea: Idea, onClick: () => void, onEdit: (e: React.MouseEvent) => void, onDelete: (e: React.MouseEvent) => void, onFavourite: (e: React.MouseEvent) => void, onGenerate: (e: React.MouseEvent) => void }) {
   return (
-    <motion.div 
-      whileHover={{ y: -4, scale: 1.02 }} 
+    <div 
       onClick={onClick}
-      className="h-[220px] rounded-[24px] bg-card border border-border p-5 flex flex-col justify-between group cursor-pointer relative overflow-hidden"
+      className="h-[180px] card-interactive p-5 flex flex-col justify-between group relative overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-foreground/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-      
       {/* Action Overlay */}
-      <div className="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity translate-y-[-10px] group-hover:translate-y-0 duration-300 z-10">
-        <button onClick={onFavourite} className="p-2 rounded-xl bg-background/80 backdrop-blur-sm border border-border text-muted-foreground hover:text-red-500 hover:border-red-500/50 transition-colors shadow-sm" title="Favourite">
-          <Heart className={cn("w-4 h-4", idea.is_favorite ? "fill-red-500 text-red-500" : "")} />
+      <div className="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-background/80 backdrop-blur-md p-1 rounded-lg border border-border/50">
+        <button onClick={onFavourite} className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-red-500 transition-colors" title="Favourite">
+          <Heart className={cn("w-3.5 h-3.5", idea.is_favorite ? "fill-red-500 text-red-500" : "")} />
         </button>
-        <button onClick={onGenerate} className="p-2 rounded-xl bg-background/80 backdrop-blur-sm border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors shadow-sm" title="Generate AI">
-          <Wand2 className="w-4 h-4" />
+        <button onClick={onGenerate} className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-primary transition-colors" title="Generate AI">
+          <Wand2 className="w-3.5 h-3.5" />
         </button>
-        <button onClick={onEdit} className="p-2 rounded-xl bg-background/80 backdrop-blur-sm border border-border text-muted-foreground hover:text-blue-500 hover:border-blue-500/50 transition-colors shadow-sm" title="Edit">
-          <Edit2 className="w-4 h-4" />
+        <button onClick={onEdit} className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-blue-500 transition-colors" title="Edit">
+          <Edit2 className="w-3.5 h-3.5" />
         </button>
-        <button onClick={onDelete} className="p-2 rounded-xl bg-background/80 backdrop-blur-sm border border-border text-muted-foreground hover:text-destructive hover:border-destructive/50 transition-colors shadow-sm" title="Delete">
-          <Trash2 className="w-4 h-4" />
+        <button onClick={onDelete} className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-destructive transition-colors" title="Delete">
+          <Trash2 className="w-3.5 h-3.5" />
         </button>
       </div>
 
       <div>
         <div className="flex items-center justify-between mb-3">
-          <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
-            <Lightbulb className="w-5 h-5 text-muted-foreground" />
-          </div>
-          <div className="px-2.5 py-1 rounded-md bg-[#8B5CF6]/10 text-[#8B5CF6] text-[13px] font-medium border border-[#8B5CF6]/20 capitalize">
-            {idea.status}
+          <div className="flex items-center gap-2">
+            <Lightbulb className="w-4 h-4 text-muted-foreground" />
+            <span className="text-[12px] font-medium text-muted-foreground capitalize tracking-wide">{idea.status}</span>
           </div>
         </div>
-        <h3 className="text-[22px] font-bold text-foreground line-clamp-1 mb-1 pr-12">{idea.title}</h3>
-        <p className="text-[16px] text-muted-foreground line-clamp-2">{idea.description || "No description provided."}</p>
+        <h3 className="text-[15px] font-semibold text-foreground line-clamp-1 mb-1 pr-12 tracking-tight">{idea.title}</h3>
+        <p className="text-[13px] text-muted-foreground line-clamp-2 leading-relaxed">{idea.description || "No description provided."}</p>
       </div>
-      <div className="flex items-center justify-between mt-4">
+      <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/30">
          <div className="flex items-center gap-2 overflow-hidden">
            {idea.tags && idea.tags.length > 0 ? idea.tags.slice(0, 2).map(tag => (
-             <span key={tag} className="flex items-center gap-1 text-[13px] text-muted-foreground whitespace-nowrap">
-               <Hash className="w-3 h-3" />{tag}
+             <span key={tag} className="flex items-center gap-1 text-[12px] text-muted-foreground whitespace-nowrap">
+               #{tag}
              </span>
            )) : (
-             <span className="text-[13px] text-muted-foreground">No tags</span>
+             <span className="text-[12px] text-muted-foreground">No tags</span>
            )}
          </div>
-         <div className="flex items-center gap-1.5 text-[13px] font-medium text-success bg-success/10 px-2.5 py-1 rounded-md shrink-0">
-            <Sparkles className="w-3.5 h-3.5" /> AI Ready
+         <div className="flex items-center gap-1.5 text-[12px] font-medium text-primary shrink-0">
+            <Sparkles className="w-3 h-3" /> Ready
          </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
@@ -224,48 +217,68 @@ export default function DashboardClient({
 
   return (
     <div className="min-h-screen bg-background font-sans">
-      <div className="max-w-[1600px] mx-auto w-full px-6 py-12 flex flex-col gap-6">
+      <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 py-6 sm:py-12 flex flex-col gap-6">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className="text-[32px] md:text-[48px] font-extrabold text-foreground tracking-tight leading-tight">
+            <h1 className="text-h2 leading-tight">
               {greeting}
             </h1>
-            <p className="text-[14px] md:text-[16px] text-muted-foreground mt-1">
+            <p className="text-body mt-0.5 text-muted-foreground">
               You have <span className="text-foreground font-medium">{stats.pending || 0} ideas</span> waiting to become content.
             </p>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="flex items-center gap-4">
-            <button onClick={() => setIsCaptureModalOpen(true)} className="flex items-center gap-2 px-4 py-3 rounded-xl bg-card hover:bg-muted border border-border text-foreground text-[16px] font-medium transition-all hover:-translate-y-0.5">
-              <Plus className="w-5 h-5" /> Quick Capture
+          <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="flex items-center gap-2">
+            <button onClick={() => setIsCaptureModalOpen(true)} className="btn-outline h-8 px-3 text-[13px]">
+              <Plus className="w-4 h-4" /> Quick Capture
             </button>
-            <Link href="/dashboard/ai-studio" className="flex items-center gap-2 px-4 py-3 rounded-xl bg-primary text-primary-foreground text-[16px] font-medium transition-all hover:opacity-90 hover:shadow-[0_0_20px_rgba(var(--primary),0.4)] hover:-translate-y-0.5">
-              <Sparkles className="w-5 h-5" /> AI Generator
+            <Link href="/dashboard/generate" className="btn-primary h-8 px-3 text-[13px]">
+              <Sparkles className="w-4 h-4" /> Generate
             </Link>
-            <button className="w-[44px] h-[44px] md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl bg-card hover:bg-muted border border-border text-muted-foreground transition-colors" aria-label="Notifications">
-              <Bell className="w-5 h-5" />
+            <div className="w-px h-5 bg-border/50 mx-1"></div>
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-muted text-muted-foreground transition-colors" aria-label="Notifications">
+              <Bell className="w-4 h-4" />
             </button>
-            <button className="w-[44px] h-[44px] md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-[16px]" aria-label="Profile">
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-primary/10 text-primary font-semibold text-[13px] border border-primary/20" aria-label="Profile">
               {userDisplayName?.charAt(0) || "C"}
             </button>
           </motion.div>
         </div>
 
+        {/* Toolbar */}
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="flex flex-col sm:flex-row items-center justify-between gap-3 pb-4 mb-2 border-b border-border/50">
+           <div className="relative w-full sm:w-80">
+             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+             <input type="text" placeholder="Search ideas..." className="input-base pl-9 py-1.5" />
+           </div>
+           <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto hide-scrollbar pb-1 sm:pb-0">
+             <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border/50 text-[13px] font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors bg-card/40 whitespace-nowrap shadow-sm">
+               <Layers className="w-3.5 h-3.5" /> Collections
+             </button>
+             <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border/50 text-[13px] font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors bg-card/40 whitespace-nowrap shadow-sm">
+               <Hash className="w-3.5 h-3.5" /> Filters
+             </button>
+             <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border/50 text-[13px] font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors bg-card/40 whitespace-nowrap shadow-sm">
+               <TrendingDown className="w-3.5 h-3.5" /> Sort
+             </button>
+           </div>
+        </motion.div>
+
         {/* Statistics Row */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div onClick={() => router.push("/dashboard/ideas")} className="cursor-pointer">
             <StatCard title="Current Streak" value={stats.streak || 0} desc={stats.streak > 3 ? "On fire!" : "Keep it up"} icon={Flame} color="text-orange-500" trendUp={stats.streak > 0} />
           </div>
           <div onClick={() => router.push("/dashboard/ideas?filter=pending")} className="cursor-pointer">
-            <StatCard title="Pending Ideas" value={stats.pending || 0} desc="Awaiting action" icon={Lightbulb} color="text-success" trendUp={stats.pending > 0} />
+            <StatCard title="Pending Ideas" value={stats.pending || 0} desc="Awaiting action" icon={Lightbulb} color="text-emerald-500" trendUp={stats.pending > 0} />
           </div>
           <div onClick={() => router.push("/dashboard/analytics")} className="cursor-pointer">
-            <StatCard title="AI Productivity" value={stats.aiScore || 0} desc="Score" icon={Target} color="text-primary" trendUp={stats.aiScore > 50} />
+            <StatCard title="AI Score" value={stats.aiScore || 0} desc="Productivity" icon={Target} color="text-primary" trendUp={stats.aiScore > 50} />
           </div>
           <div onClick={() => router.push("/dashboard/ideas?filter=published")} className="cursor-pointer">
-            <StatCard title="Ideas Published" value={stats.published || 0} desc="Lifetime content" icon={CheckCircle2} color="text-blue-500" trendUp={false} />
+            <StatCard title="Published" value={stats.published || 0} desc="Lifetime content" icon={CheckCircle2} color="text-blue-500" trendUp={false} />
           </div>
         </motion.div>
 
@@ -276,59 +289,59 @@ export default function DashboardClient({
           <div className="lg:col-span-2 flex flex-col gap-6">
             
             {/* AI Suggestions Hero Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} className="rounded-[24px] bg-card border border-border p-6 flex flex-col gap-6 relative overflow-hidden group">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} className="rounded-[14px] bg-card/40 border border-border/50 p-5 flex flex-col gap-5 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
               
               <div>
-                <h2 className="text-[28px] font-bold text-foreground flex items-center gap-2 mb-2 tracking-tight">
-                  <Sparkles className="w-6 h-6 text-primary" /> AI Suggestions
+                <h2 className="text-h3 flex items-center gap-2 mb-1">
+                  <Sparkles className="w-4 h-4 text-primary" /> AI Suggestions
                 </h2>
               </div>
 
-              <div className="flex flex-col md:flex-row md:items-center justify-between bg-muted/30 p-6 rounded-2xl border border-border gap-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between bg-background/50 p-4 rounded-xl border border-border/50 gap-4">
                 <div>
-                  <span className="text-[13px] text-primary font-semibold uppercase tracking-wider mb-2 block">Top Recommendation</span>
+                  <span className="text-[12px] text-primary font-medium uppercase tracking-wider mb-1 block">Top Recommendation</span>
                   {localIdeas.length > 0 ? (
                     <>
-                      <h3 className="text-[22px] font-bold text-foreground mb-2 leading-tight">Generate content for '{localIdeas[0].title}'</h3>
-                      <p className="text-[16px] text-muted-foreground leading-relaxed max-w-xl">Reason: Fresh idea with high potential. Convert it to a Twitter Thread now.</p>
+                      <h3 className="text-[16px] font-semibold text-foreground mb-1 leading-tight">Generate content for '{localIdeas[0].title}'</h3>
+                      <p className="text-[13px] text-muted-foreground leading-relaxed max-w-xl">Reason: Fresh idea with high potential. Convert it to a Twitter Thread now.</p>
                     </>
                   ) : (
                     <>
-                      <h3 className="text-[22px] font-bold text-foreground mb-2 leading-tight">Capture an idea first</h3>
-                      <p className="text-[16px] text-muted-foreground leading-relaxed max-w-xl">You don't have any ideas yet. Capture one to get AI recommendations.</p>
+                      <h3 className="text-[16px] font-semibold text-foreground mb-1 leading-tight">Capture an idea first</h3>
+                      <p className="text-[13px] text-muted-foreground leading-relaxed max-w-xl">You don't have any ideas yet. Capture one to get AI recommendations.</p>
                     </>
                   )}
                 </div>
                 {localIdeas.length > 0 && (
                   <button 
                     onClick={() => router.push(`/dashboard/ideas/${localIdeas[0].id}?action=generate&template=Twitter%20Thread`)}
-                    className="whitespace-nowrap px-6 py-3 rounded-xl bg-primary text-primary-foreground text-[16px] font-medium shadow-[0_0_15px_rgba(var(--primary),0.3)] hover:opacity-90 transition-all hover:scale-[1.02]"
+                    className="whitespace-nowrap px-4 py-2 rounded-lg bg-primary text-primary-foreground text-[13px] font-medium shadow-sm hover:opacity-90 transition-all"
                   >
                     Generate Now
                   </button>
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2">
                  <button 
                    onClick={() => localIdeas.length > 0 && router.push(`/dashboard/ideas/${localIdeas[0].id}?action=generate&template=Carousel`)}
                    disabled={localIdeas.length === 0}
-                   className="px-4 py-2 rounded-xl bg-muted/50 border border-border text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground transition-colors font-medium text-left disabled:opacity-50"
+                   className="px-3 py-1.5 rounded-lg bg-card border border-border/50 text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground transition-colors font-medium disabled:opacity-50 shadow-sm"
                  >
                    Convert to Carousel
                  </button>
                  <button 
                    onClick={() => localIdeas.length > 0 && router.push(`/dashboard/ideas/${localIdeas[0].id}?action=generate&template=Newsletter`)}
                    disabled={localIdeas.length === 0}
-                   className="px-4 py-2 rounded-xl bg-muted/50 border border-border text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground transition-colors font-medium text-left disabled:opacity-50"
+                   className="px-3 py-1.5 rounded-lg bg-card border border-border/50 text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground transition-colors font-medium disabled:opacity-50 shadow-sm"
                  >
                    Draft Newsletter
                  </button>
                  <button 
                    onClick={() => localIdeas.length > 0 && router.push(`/dashboard/ideas/${localIdeas[0].id}?action=generate&template=LinkedIn%20Post`)}
                    disabled={localIdeas.length === 0}
-                   className="px-4 py-2 rounded-xl bg-muted/50 border border-border text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground transition-colors font-medium text-left disabled:opacity-50"
+                   className="px-3 py-1.5 rounded-lg bg-card border border-border/50 text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground transition-colors font-medium disabled:opacity-50 shadow-sm"
                  >
                    Repurpose for LinkedIn
                  </button>
@@ -336,14 +349,14 @@ export default function DashboardClient({
             </motion.div>
 
             {/* Recent Ideas */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className="flex flex-col gap-4 pt-2">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className="flex flex-col gap-3 pt-2">
               <div className="flex items-center justify-between">
-                <h2 className="text-[28px] font-bold text-foreground tracking-tight">Recent Ideas</h2>
-                <Link href="/dashboard/ideas" className="text-[16px] text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 font-medium">
-                  View All <ArrowRight className="w-4 h-4" />
+                <h2 className="text-h3">Recent Ideas</h2>
+                <Link href="/dashboard/ideas" className="text-[13px] text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 font-medium">
+                  View All <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {localIdeas.slice(0, 4).map(idea => (
                   <CompactIdeaCard 
                     key={idea.id} 
@@ -360,31 +373,28 @@ export default function DashboardClient({
                   />
                 ))}
                 {localIdeas.length === 0 && (
-                  <div className="col-span-2 p-12 rounded-[24px] border border-border bg-card text-center flex flex-col items-center justify-center">
-                    <Lightbulb className="w-8 h-8 text-muted-foreground mb-4" />
-                    <p className="text-[22px] font-bold text-foreground mb-2">No ideas yet</p>
-                    <p className="text-[16px] text-muted-foreground">Capture your first idea to get started.</p>
+                  <div className="col-span-2 p-10 rounded-[14px] border border-border/50 bg-card/40 text-center flex flex-col items-center justify-center">
+                    <Logo variant="icon" size={48} className="mb-4 opacity-50 grayscale" />
+                    <p className="text-[16px] font-semibold text-foreground mb-1">No ideas yet</p>
+                    <p className="text-[13px] text-muted-foreground">Capture your first idea to get started.</p>
                   </div>
                 )}
               </div>
             </motion.div>
 
             {/* Activity Timeline */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} className="flex flex-col gap-4 pt-2">
-              <h2 className="text-[28px] font-bold text-foreground tracking-tight">Recent Activity</h2>
-              <div className="rounded-[24px] bg-card border border-border p-8">
-                 <div className="space-y-0">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} className="flex flex-col gap-3 pt-2">
+              <h2 className="text-h3">Recent Activity</h2>
+              <div className="rounded-[14px] bg-card/40 border border-border/50 p-6">
+                 <div className="relative border-l border-border/50 ml-3 space-y-6">
                     {mockActivity.map((act, i) => (
-                      <div key={i} className="flex gap-6 group">
-                        <div className="flex flex-col items-center">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${act.bg} ${act.color} ring-8 ring-card z-10`}>
-                            <act.icon className="w-5 h-5" />
-                          </div>
-                          {i !== mockActivity.length - 1 && <div className="w-[2px] h-12 bg-border my-1" />}
+                      <div key={i} className="flex gap-4 relative">
+                        <div className={`absolute -left-[28px] top-1 w-6 h-6 rounded-full flex items-center justify-center ${act.bg} ${act.color} ring-4 ring-card bg-background z-10`}>
+                          <act.icon className="w-3 h-3" />
                         </div>
-                        <div className="pt-2 pb-6">
-                          <p className="text-[16px] font-medium text-foreground group-hover:text-primary transition-colors cursor-default">{act.title}</p>
-                          <span className="text-[13px] text-muted-foreground">{act.time}</span>
+                        <div>
+                          <p className="text-[14px] font-medium text-foreground leading-none mb-1.5">{act.title}</p>
+                          <span className="text-[12px] text-muted-foreground">{act.time}</span>
                         </div>
                       </div>
                     ))}
@@ -397,39 +407,39 @@ export default function DashboardClient({
           <div className="flex flex-col gap-6">
             
             {/* AI Productivity Widget */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className="rounded-[24px] bg-card border border-border p-6 flex flex-col gap-4">
-               <h2 className="text-[22px] font-bold text-foreground tracking-tight flex items-center gap-2">
-                 <Activity className="w-5 h-5 text-success" /> AI Productivity
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className="rounded-[14px] bg-card/40 border border-border/50 p-5 flex flex-col gap-4">
+               <h2 className="text-h3 flex items-center gap-2">
+                 <Activity className="w-4 h-4 text-emerald-500" /> Productivity Score
                </h2>
-               <div className="flex flex-col gap-4 pt-2">
+               <div className="flex flex-col gap-3 pt-1">
                  <div className="flex justify-between items-end">
-                   <div className="text-[48px] font-extrabold text-foreground leading-none tracking-tight">{stats.aiScore || 0}<span className="text-[22px] text-muted-foreground">/100</span></div>
-                   <div className="text-[13px] text-success font-medium px-2 py-1 bg-success/10 rounded-lg flex items-center gap-1 mb-1">
-                     <TrendingUp className="w-3.5 h-3.5" /> +5
+                   <div className="text-[32px] font-semibold text-foreground leading-none tracking-tight">{stats.aiScore || 0}<span className="text-[16px] text-muted-foreground font-normal">/100</span></div>
+                   <div className="text-[12px] text-emerald-500 font-medium px-2 py-0.5 bg-emerald-500/10 rounded flex items-center gap-1 mb-1">
+                     <TrendingUp className="w-3 h-3" /> +5
                    </div>
                  </div>
-                 <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                 <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
                    <div className="h-full bg-primary rounded-full" style={{ width: `${stats.aiScore || 0}%` }} />
                  </div>
-                 <p className="text-[13px] text-muted-foreground leading-relaxed">
-                   Your AI utilization is growing. Keep capturing ideas and generating content to boost your score!
+                 <p className="text-[12px] text-muted-foreground leading-relaxed">
+                   Your AI utilization is growing. Keep capturing ideas and generating content.
                  </p>
                </div>
             </motion.div>
 
             {/* Recommended Next Steps */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} className="rounded-[24px] bg-card border border-border p-6 flex flex-col gap-4">
-               <h2 className="text-[22px] font-bold text-foreground tracking-tight flex items-center gap-2">
-                 <Compass className="w-5 h-5 text-blue-500" /> Next Steps
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} className="rounded-[14px] bg-card/40 border border-border/50 p-5 flex flex-col gap-4">
+               <h2 className="text-h3 flex items-center gap-2">
+                 <Compass className="w-4 h-4 text-blue-500" /> Next Steps
                </h2>
-               <div className="flex flex-col gap-3 pt-2">
+               <div className="flex flex-col gap-2 pt-1">
                  {mockRepurposing.map(item => (
-                   <div key={item.id} className="p-4 rounded-2xl bg-muted/50 hover:bg-muted border border-border transition-colors cursor-pointer group">
-                     <div className="flex items-center gap-3 mb-1">
-                       <item.icon className={`w-4 h-4 ${item.color}`} />
-                       <span className="text-[16px] font-medium text-foreground">{item.title}</span>
+                   <div key={item.id} className="p-3 rounded-lg bg-card border border-border/50 hover:bg-muted transition-colors cursor-pointer group shadow-sm">
+                     <div className="flex items-center gap-2 mb-1">
+                       <item.icon className={`w-3.5 h-3.5 ${item.color}`} />
+                       <span className="text-[13px] font-medium text-foreground">{item.title}</span>
                      </div>
-                     <p className="text-[13px] text-muted-foreground pl-7 group-hover:text-foreground transition-colors">
+                     <p className="text-[12px] text-muted-foreground pl-[26px] group-hover:text-foreground transition-colors">
                        {item.recommend} &rarr;
                      </p>
                    </div>
@@ -438,23 +448,23 @@ export default function DashboardClient({
             </motion.div>
 
             {/* Recent Generations */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.6 }} className="rounded-[24px] bg-card border border-border p-6 flex flex-col gap-4">
-               <h2 className="text-[22px] font-bold text-foreground tracking-tight flex items-center gap-2">
-                 <Wand2 className="w-5 h-5 text-primary" /> Recent Output
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.6 }} className="rounded-[14px] bg-card/40 border border-border/50 p-5 flex flex-col gap-3">
+               <h2 className="text-h3 flex items-center gap-2">
+                 <Wand2 className="w-4 h-4 text-primary" /> Recent Output
                </h2>
-               <div className="flex flex-col gap-2 pt-2">
+               <div className="flex flex-col gap-2 pt-1">
                  {mockRecentAI.map(item => (
-                   <div key={item.id} onClick={() => router.push("/dashboard/ai-studio")} className="flex items-center justify-between p-3 rounded-2xl hover:bg-muted transition-colors cursor-pointer group">
+                   <div key={item.id} onClick={() => router.push("/dashboard/generate")} className="flex items-center justify-between p-2.5 rounded-lg border border-transparent hover:border-border/50 hover:bg-muted transition-colors cursor-pointer group">
                      <div className="flex items-center gap-3">
-                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.bg}`}>
-                         <item.icon className={`w-5 h-5 ${item.color}`} />
+                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${item.bg}`}>
+                         <item.icon className={`w-4 h-4 ${item.color}`} />
                        </div>
                        <div>
-                         <p className="text-[16px] font-medium text-foreground group-hover:text-primary transition-colors">{item.title}</p>
-                         <p className="text-[13px] text-muted-foreground">{item.type}</p>
+                         <p className="text-[13px] font-medium text-foreground group-hover:text-primary transition-colors leading-tight">{item.title}</p>
+                         <p className="text-[12px] text-muted-foreground leading-tight mt-0.5">{item.type}</p>
                        </div>
                      </div>
-                     <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                     <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                    </div>
                  ))}
                </div>
@@ -479,7 +489,7 @@ export default function DashboardClient({
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
               exit={{ opacity: 0, scale: 0.95 }} 
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-card border border-border shadow-2xl z-10 hide-scrollbar"
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto card-base p-0 shadow-2xl z-10 hide-scrollbar"
             >
               <div className="sticky top-0 bg-card border-b border-border z-20 flex items-center justify-between p-4">
                 <h3 className="text-lg font-bold">Quick Capture</h3>
@@ -525,31 +535,31 @@ export default function DashboardClient({
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
               exit={{ opacity: 0, scale: 0.95 }} 
-              className="relative w-full max-w-md rounded-2xl bg-card border border-border shadow-2xl p-6 z-10"
+              className="relative w-full max-w-md card-base shadow-2xl z-10"
             >
-              <h3 className="text-xl font-bold mb-4">Edit Idea</h3>
+              <h3 className="text-h3 mb-4">Edit Idea</h3>
               <div className="space-y-4">
-                <div>
-                  <label className="text-sm text-muted-foreground font-medium mb-1.5 block">Title</label>
+                <div className="form-group">
+                  <label className="label-base mb-0">Title</label>
                   <input 
                     type="text" 
                     value={editTitle} 
                     onChange={e => setEditTitle(e.target.value)} 
-                    className="w-full bg-surface border border-border rounded-xl px-4 py-2 focus:border-primary outline-none" 
+                    className="input-base" 
                   />
                 </div>
-                <div>
-                  <label className="text-sm text-muted-foreground font-medium mb-1.5 block">Description</label>
+                <div className="form-group">
+                  <label className="label-base mb-0">Description</label>
                   <textarea 
                     value={editDesc} 
                     onChange={e => setEditDesc(e.target.value)} 
                     rows={4}
-                    className="w-full bg-surface border border-border rounded-xl px-4 py-2 focus:border-primary outline-none resize-none" 
+                    className="input-base h-auto resize-none py-2" 
                   />
                 </div>
                 <div className="flex items-center gap-3 justify-end mt-4">
-                  <button onClick={() => setIsEditModalOpen(false)} className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground">Cancel</button>
-                  <button onClick={saveEdit} disabled={isSaving} className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-xl hover:opacity-90 disabled:opacity-50 flex items-center gap-2">
+                  <button onClick={() => setIsEditModalOpen(false)} className="btn-ghost">Cancel</button>
+                  <button onClick={saveEdit} disabled={isSaving} className="btn-primary">
                     {isSaving && <Loader2 className="w-4 h-4 animate-spin" />} Save
                   </button>
                 </div>
@@ -574,18 +584,18 @@ export default function DashboardClient({
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
               exit={{ opacity: 0, scale: 0.95 }} 
-              className="relative w-full max-w-sm rounded-2xl bg-card border border-border shadow-2xl p-6 z-10"
+              className="relative w-full max-w-sm card-base shadow-2xl z-10"
             >
               <div className="w-12 h-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center mb-4">
                 <AlertTriangle className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Delete Idea?</h3>
-              <p className="text-muted-foreground text-sm mb-6">Are you sure you want to delete "{activeIdea.title}"? This action cannot be undone.</p>
+              <h3 className="text-h3 mb-2">Delete Idea?</h3>
+              <p className="text-body mb-6">Are you sure you want to delete "{activeIdea.title}"? This action cannot be undone.</p>
               <div className="flex items-center gap-3 w-full">
-                <button onClick={() => setIsDeleteModalOpen(false)} className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-surface hover:bg-muted text-sm font-medium transition-colors">
+                <button onClick={() => setIsDeleteModalOpen(false)} className="btn-secondary flex-1">
                   Cancel
                 </button>
-                <button onClick={handleDelete} disabled={isSaving} className="flex-1 px-4 py-2.5 rounded-xl bg-destructive text-destructive-foreground hover:opacity-90 text-sm font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
+                <button onClick={handleDelete} disabled={isSaving} className="btn-primary bg-destructive hover:bg-destructive/90 text-destructive-foreground flex-1 border-none shadow-none">
                   {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Delete"}
                 </button>
               </div>

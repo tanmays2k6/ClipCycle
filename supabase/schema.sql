@@ -13,7 +13,7 @@ create extension if not exists "pgcrypto";
 -- Enums
 -- ─────────────────────────────────────────────────────────────────────────────
 
-create type idea_status   as enum ('pending', 'draft', 'used', 'archived');
+create type idea_status   as enum ('pending', 'draft', 'analyzed', 'generated', 'ready', 'published', 'used', 'archived');
 create type idea_source   as enum ('text', 'link', 'screenshot', 'voice', 'instagram-save', 'bookmark');
 create type idea_platform as enum ('instagram', 'youtube', 'linkedin', 'twitter', 'blog');
 create type content_type  as enum ('caption', 'script', 'post', 'thread', 'outline', 'article');
@@ -66,6 +66,11 @@ create table public.ideas (
   tags            text[] not null default '{}',
   ai_suggestion   text,
   is_favorite     boolean not null default false,
+  published_at    timestamptz,
+  published_platform text,
+  published_url   text,
+  scheduled_at    timestamptz,
+  last_generated_at timestamptz,
   created_at      timestamptz not null default now(),
   updated_at      timestamptz not null default now()
 );

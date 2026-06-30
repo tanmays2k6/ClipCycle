@@ -14,7 +14,7 @@ function Toggle({ enabled, onChange }: { enabled: boolean, onChange: (val: boole
     >
       <div
         className={cn(
-          "absolute top-0.5 w-5 h-5 rounded-full bg-white transition-transform duration-300 shadow-sm",
+          "absolute top-0.5 w-5 h-5 rounded-full bg-card transition-transform duration-300 shadow-sm",
           enabled ? "translate-x-5" : "translate-x-0.5"
         )}
       />

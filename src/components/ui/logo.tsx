@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { cn } from "@/utils/cn";
 
 export interface LogoProps {
   size?: number;
-  variant?: "full" | "icon";
+  variant?: "horizontal" | "icon";
   className?: string;
   animated?: boolean;
 }
@@ -17,28 +16,22 @@ export function Logo({
   className,
   animated = false,
 }: LogoProps) {
-  // We use object-contain to ensure the logo is never cropped.
-  // The container relies on height, and width adjusts automatically.
-  // We apply mix-blend-screen so the black background blends seamlessly into the dark theme.
-  
-  const imgSrc = variant === "full" ? "/images/logo.jpg" : "/images/icon.png";
+  const imgSrc = variant === "horizontal" 
+    ? "https://i.postimg.cc/d3VW6qP0/Chat-GPT-Image-Jun-30-2026-10-03-16-PM.png" 
+    : "https://i.postimg.cc/T1BrbGT4/Chat-GPT-Image-Jun-30-2026-10-15-15-PM.png";
 
   const content = (
     <div
       className={cn(
-        "relative flex items-center justify-start mix-blend-screen",
+        "relative flex items-center justify-start",
         className
       )}
-      style={{ height: `${size}px`, minWidth: `${size}px` }}
+      style={{ height: `${size}px` }}
     >
-      <Image
+      <img
         src={imgSrc}
         alt="ClipCycle Logo"
-        width={0}
-        height={0}
-        sizes="100vw"
-        priority
-        className="w-auto h-full object-contain pointer-events-none select-none"
+        className="w-auto h-full object-contain pointer-events-none select-none dark:drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] transition-all"
       />
     </div>
   );
@@ -46,7 +39,7 @@ export function Logo({
   if (animated) {
     return (
       <motion.div
-        whileHover={{ rotate: 5, scale: 1.05 }}
+        whileHover={{ rotate: variant === "icon" ? 5 : 1, scale: 1.02 }}
         transition={{ type: "spring", stiffness: 400, damping: 10 }}
         className="inline-flex items-center cursor-pointer"
       >

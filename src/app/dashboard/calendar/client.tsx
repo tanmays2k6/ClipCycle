@@ -168,6 +168,7 @@ function DroppableDay({
               : "text-text-primary"
           )}
         >
+          <span className="sm:hidden mr-1 text-[10px] font-bold uppercase">{format(day, "EEE")}</span>
           {format(day, "d")}
         </span>
       </div>
@@ -404,7 +405,7 @@ export default function CalendarClient({
 
           {/* Grid Header (Days of week) */}
           {view !== "today" && (
-            <div className="grid grid-cols-7 border-b border-border/50 bg-surface/20 shrink-0">
+            <div className="hidden sm:grid grid-cols-7 border-b border-border/50 bg-surface/20 shrink-0">
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
                 <div key={day} className="py-3 text-center text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                   {day}
@@ -419,7 +420,7 @@ export default function CalendarClient({
               <div 
                 className={cn(
                   "h-full border-t border-l border-border/50 rounded-2xl overflow-hidden shadow-sm bg-surface/5 backdrop-blur-sm",
-                  view !== "today" ? "grid grid-cols-7" : "grid grid-cols-1"
+                  view !== "today" ? "grid grid-cols-1 sm:grid-cols-7" : "grid grid-cols-1"
                 )}
                 style={{ 
                   gridTemplateRows: view === "month" ? `repeat(${Math.ceil(daysToRender.length / 7)}, minmax(120px, 1fr))` : "1fr"

@@ -61,8 +61,8 @@ export function InstagramCapture() {
   return (
     <div className="space-y-5">
       {/* Input */}
-      <div>
-        <label className="text-sm font-medium text-text-secondary mb-1.5 block">
+      <div className="form-group">
+        <label className="label-base">
           Instagram URL
         </label>
         <div className="relative">
@@ -72,12 +72,8 @@ export function InstagramCapture() {
             onChange={(e) => validateAndFetch(e.target.value)}
             placeholder="https://www.instagram.com/p/..."
             className={cn(
-              "w-full pl-11 pr-4 py-3 rounded-xl bg-background border text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none transition-all",
-              isValid === false
-                ? "border-red-500/50 focus:border-red-500/60 focus:ring-1 focus:ring-red-500/20"
-                : isValid === true
-                ? "border-violet-500/40 focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/20"
-                : "border-border focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20"
+              "input-base pl-11",
+              isValid === false && "input-error"
             )}
           />
           <Link2 className="absolute left-4 top-3.5 w-4 h-4 text-text-tertiary" />
@@ -125,11 +121,11 @@ export function InstagramCapture() {
                   className="w-8 h-8 rounded-full object-cover border border-border"
                 />
                 <div className="text-left">
-                  <p className="text-sm font-semibold text-text-primary flex items-center gap-1.5">
+                  <p className="text-h3 flex items-center gap-1.5">
                     {preview.username}
                     <Camera className="w-3.5 h-3.5 text-pink-400" />
                   </p>
-                  <p className="text-[10px] text-text-tertiary">Instagram Creator</p>
+                  <p className="text-caption">Instagram Creator</p>
                 </div>
               </div>
             </div>
@@ -159,7 +155,7 @@ export function InstagramCapture() {
 
             {/* Content info */}
             <div className="p-4 space-y-4">
-              <p className="text-sm text-text-secondary leading-relaxed line-clamp-2 text-left">
+              <p className="text-body line-clamp-2 text-left">
                 {preview.caption}
               </p>
 
@@ -175,7 +171,7 @@ export function InstagramCapture() {
               <motion.button
                 whileTap={{ scale: 0.98 }}
                 onClick={handleSave}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-medium bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 transition-all shadow-lg shadow-violet-600/20"
+                className="btn-base w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-lg shadow-violet-600/20 border-0"
               >
                 {saved ? (
                   <>

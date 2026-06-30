@@ -313,18 +313,18 @@ export function VoiceCapture() {
                   <Settings className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold">Microphone Access Denied</h3>
-                  <p className="text-sm text-text-secondary">We need access to record voice notes.</p>
+                  <h3 className="text-h3">Microphone Access Denied</h3>
+                  <p className="text-body">We need access to record voice notes.</p>
                 </div>
               </div>
-              <p className="text-sm text-text-secondary mb-6">
+              <p className="text-body mb-6">
                 Please allow microphone permissions in your browser settings and try again.
               </p>
               <div className="flex justify-end gap-3">
-                <button onClick={() => setShowPermissionModal(false)} className="px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary">
+                <button onClick={() => setShowPermissionModal(false)} className="btn-secondary">
                   Cancel
                 </button>
-                <button onClick={requestMicrophoneAccess} className="px-4 py-2 text-sm font-medium bg-brand-primary text-white rounded-lg hover:bg-brand-secondary transition-colors">
+                <button onClick={requestMicrophoneAccess} className="btn-primary">
                   Retry Access
                 </button>
               </div>
@@ -362,7 +362,7 @@ export function VoiceCapture() {
 
         {/* Timers & Status */}
         <div className="text-center">
-          <p className="text-sm font-semibold text-text-primary">
+          <p className="text-h3">
             {isRecording ? "Recording Voice Note..." : audioUrl ? "Voice Note Recorded" : "Press Mic to Record"}
           </p>
           <p className="text-2xl font-bold font-mono text-text-secondary mt-1">
@@ -431,8 +431,8 @@ export function VoiceCapture() {
             className="space-y-5"
           >
             {/* Title */}
-            <div>
-              <label className="text-sm font-medium text-text-secondary mb-1.5 block">
+            <div className="form-group">
+              <label className="label-base">
                 Idea Title
               </label>
               <input
@@ -440,7 +440,7 @@ export function VoiceCapture() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="What's this voice note about?"
-                className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm text-text-primary focus:outline-none focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20 transition-all"
+                className="input-base"
               />
             </div>
 
@@ -465,10 +465,10 @@ export function VoiceCapture() {
                   <div className="h-3 w-4/6 rounded bg-surface-hover animate-pulse" />
                 </div>
               ) : (
-                <textarea
+                  <textarea
                   value={transcript}
                   onChange={(e) => setTranscript(e.target.value)}
-                  className="w-full bg-transparent text-sm text-text-secondary leading-relaxed resize-none focus:outline-none min-h-[100px]"
+                  className="w-full bg-transparent text-body resize-none focus:outline-none min-h-[100px] border-none focus:ring-0 p-0"
                   placeholder="Your transcript will appear here..."
                 />
               )}
@@ -488,10 +488,10 @@ export function VoiceCapture() {
               onClick={handleSave}
               disabled={isSaving || isGeneratingTranscript}
               className={cn(
-                "w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-medium text-white transition-all shadow-lg",
+                "btn-base w-full shadow-lg border-0",
                 isSaving || isGeneratingTranscript
                   ? "bg-surface-hover text-text-tertiary cursor-not-allowed shadow-none"
-                  : "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 shadow-violet-600/20"
+                  : "bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-violet-600/20"
               )}
             >
               {saved ? (

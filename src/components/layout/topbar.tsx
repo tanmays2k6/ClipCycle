@@ -15,6 +15,8 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { cn } from "@/utils/cn";
 
 interface TopbarProps {
   mobileMenuOpen: boolean;
@@ -57,10 +59,10 @@ export function Topbar({ mobileMenuOpen, onToggleMobileMenu }: TopbarProps) {
             <div className="flex flex-col">
               {!isDashboard && (
                 <>
-                  <h1 className="text-xl font-semibold text-text-primary tracking-tighter">
+                  <h1 className="text-h2">
                     {title}
                   </h1>
-                  <p className="text-[13px] text-text-tertiary mt-0.5">
+                  <p className="text-caption mt-0.5">
                     {subtitle}
                   </p>
                 </>
@@ -71,6 +73,8 @@ export function Topbar({ mobileMenuOpen, onToggleMobileMenu }: TopbarProps) {
           {/* Right: Actions + Notifications + Avatar */}
           <div className="flex items-center gap-4">
             
+            <ThemeToggle />
+
             <div className="hidden sm:flex items-center gap-3 mr-2">
               {!isDashboard && (
                 <>
@@ -119,7 +123,7 @@ export function Topbar({ mobileMenuOpen, onToggleMobileMenu }: TopbarProps) {
                       initial={{ opacity: 0, y: 10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className="absolute right-0 mt-3 w-80 rounded-2xl bg-surface border border-border shadow-premium z-50 overflow-hidden"
+                      className="absolute right-0 mt-3 w-[calc(100vw-2rem)] sm:w-80 rounded-2xl bg-surface border border-border shadow-premium z-50 overflow-hidden"
                     >
                       <div className="p-4 border-b border-border/50">
                         <h3 className="text-sm font-bold text-text-primary">Notifications</h3>
@@ -159,53 +163,6 @@ export function Topbar({ mobileMenuOpen, onToggleMobileMenu }: TopbarProps) {
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={onToggleMobileMenu}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-            />
-            <motion.div
-              initial={{ x: -280 }}
-              animate={{ x: 0 }}
-              exit={{ x: -280 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 left-0 bottom-0 w-[280px] z-50 bg-surface border-r border-border flex flex-col lg:hidden"
-            >
-              <div className="flex items-center gap-[16px] px-5 h-16 border-b border-border">
-                <Logo size={40} animated />
-                <span className="text-base font-semibold tracking-tight text-text-primary">
-                  ClipCycle
-                </span>
-              </div>
-              
-              <div className="p-4 flex flex-col gap-3">
-                 <Link
-                  href="/dashboard/ideas/new"
-                  onClick={onToggleMobileMenu}
-                  className="btn-secondary w-full justify-center"
-                >
-                  <Plus className="w-4 h-4" />
-                  Quick Capture
-                </Link>
-                <Link
-                  href="/dashboard/generate"
-                  onClick={onToggleMobileMenu}
-                  className="btn-primary glow w-full justify-center"
-                >
-                  <Wand2 className="w-4 h-4" />
-                  AI Generator
-                </Link>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
     </>
   );
 }

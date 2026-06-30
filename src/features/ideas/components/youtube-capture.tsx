@@ -61,8 +61,8 @@ export function YoutubeCapture() {
   return (
     <div className="space-y-5">
       {/* Input */}
-      <div>
-        <label className="text-sm font-medium text-text-secondary mb-1.5 block">
+      <div className="form-group">
+        <label className="label-base">
           YouTube URL
         </label>
         <div className="relative">
@@ -72,12 +72,8 @@ export function YoutubeCapture() {
             onChange={(e) => validateAndFetch(e.target.value)}
             placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..."
             className={cn(
-              "w-full pl-11 pr-4 py-3 rounded-xl bg-background border text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none transition-all",
-              isValid === false
-                ? "border-red-500/50 focus:border-red-500/60 focus:ring-1 focus:ring-red-500/20"
-                : isValid === true
-                ? "border-violet-500/40 focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/20"
-                : "border-border focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20"
+              "input-base pl-11",
+              isValid === false && "input-error"
             )}
           />
           <Link2 className="absolute left-4 top-3.5 w-4 h-4 text-text-tertiary" />
@@ -138,7 +134,7 @@ export function YoutubeCapture() {
             {/* Video Details */}
             <div className="p-4 space-y-4">
               <div className="space-y-1.5 text-left">
-                <h4 className="text-base font-semibold text-text-primary leading-snug">
+                <h4 className="text-h3 leading-snug">
                   {preview.title}
                 </h4>
                 <div className="flex items-center gap-3 text-xs text-text-tertiary">
@@ -175,7 +171,7 @@ export function YoutubeCapture() {
               <motion.button
                 whileTap={{ scale: 0.98 }}
                 onClick={handleSave}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-medium bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 transition-all shadow-lg shadow-violet-600/20"
+                className="btn-base w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-lg shadow-violet-600/20 border-0"
               >
                 {saved ? (
                   <>

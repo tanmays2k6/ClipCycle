@@ -7,4 +7,5 @@ export { Pricing } from "./pricing";
 export { ProductPreview } from "./product-preview";
 export { Testimonials } from "./testimonials";
 export { Faq } from "./faq";
+export { CTA } from "./cta";
 export { Footer } from "./footer";
