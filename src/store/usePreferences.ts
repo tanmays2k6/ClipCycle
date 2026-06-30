@@ -17,7 +17,7 @@ interface PreferencesState {
 export const usePreferences = create<PreferencesState>()(
   persist(
     (set) => ({
-      theme: 'dark',
+      theme: 'light',
       accentColor: 'violet',
       compactMode: false,
       reduceMotion: false,
